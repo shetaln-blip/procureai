@@ -1,0 +1,724 @@
+<title>Core Loop Audit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
+
+  :root {
+    --paper: #faf9f6;
+    --surface: #ffffff;
+    --surface-2: #f3f1ec;
+    --ink: #111113;
+    --ink-soft: #6b6a70;
+    --ink-faint: #9a99a0;
+    --line: #e4e2dd;
+    --line-strong: #cfccc4;
+    --amber: #b96a08;
+    --amber-fill: #f5a524;
+    --amber-bg: #fdf3df;
+    --emerald: #0e8f62;
+    --emerald-bg: #e7f6ef;
+    --slate: #4f6478;
+    --slate-bg: #eaf0f4;
+    --mast: #16161a;
+    --mast-ink: #f4f3ef;
+    --shadow: 0 1px 2px rgba(17,17,19,0.04), 0 8px 24px -12px rgba(17,17,19,0.10);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #131315;
+      --surface: #1b1b1e;
+      --surface-2: #202023;
+      --ink: #f1f0ec;
+      --ink-soft: #a3a2a8;
+      --ink-faint: #6f6e74;
+      --line: #2e2e32;
+      --line-strong: #3c3c41;
+      --amber: #f5ab35;
+      --amber-fill: #f5a524;
+      --amber-bg: #362a10;
+      --emerald: #38c896;
+      --emerald-bg: #10301f;
+      --slate: #9db3c6;
+      --slate-bg: #1c2a34;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131315;
+    --surface: #1b1b1e;
+    --surface-2: #202023;
+    --ink: #f1f0ec;
+    --ink-soft: #a3a2a8;
+    --ink-faint: #6f6e74;
+    --line: #2e2e32;
+    --line-strong: #3c3c41;
+    --amber: #f5ab35;
+    --amber-fill: #f5a524;
+    --amber-bg: #362a10;
+    --emerald: #38c896;
+    --emerald-bg: #10301f;
+    --slate: #9db3c6;
+    --slate-bg: #1c2a34;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .display {
+    font-family: "Space Grotesk", -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .mono { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+  a { color: inherit; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- MASTHEAD ---------- */
+  .mast {
+    background: var(--mast);
+    color: var(--mast-ink);
+  }
+  .mast .wrap { padding-top: 22px; padding-bottom: 44px; }
+  .brand {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+  .brand span { color: var(--amber-fill); }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #d8b877;
+    margin-top: 30px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--amber-fill); }
+  .mast h1 {
+    font-size: clamp(30px, 4.4vw, 44px);
+    font-weight: 700;
+    margin: 12px 0 0;
+    color: #fff;
+  }
+  .mast .sub {
+    max-width: 640px;
+    margin: 14px 0 0;
+    font-size: 15.5px;
+    color: #c6c5c9;
+  }
+
+  .flow {
+    margin-top: 34px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+    font-size: 12px;
+  }
+  .flow .step {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 11px;
+    border: 1px solid #35353a;
+    border-radius: 999px;
+    color: #cfced3;
+    background: #1e1e22;
+    white-space: nowrap;
+  }
+  .flow .step.done { border-color: #3d5847; color: #8fd6b4; background: #182620; }
+  .flow .step.core { border-color: var(--amber-fill); color: #ffd18a; background: #2c2110; font-weight: 600; }
+  .flow .arrow { color: #55545a; padding: 0 3px; align-self: center; }
+  .flow-legend {
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: #8b8a90;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .flow-legend b { color: #cfced3; font-weight: 600; }
+
+  /* ---------- NORTH STAR ---------- */
+  .northstar {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .northstar .wrap { padding: 40px 28px; }
+  .northstar .label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 10px;
+  }
+  .northstar blockquote {
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 600;
+    font-size: clamp(20px, 3vw, 27px);
+    line-height: 1.35;
+    max-width: 780px;
+    text-wrap: balance;
+  }
+  .not-list { margin-top: 18px; display: flex; flex-direction: column; gap: 5px; }
+  .not-list span { color: var(--ink-faint); font-size: 14px; }
+  .not-list s { text-decoration-color: var(--line-strong); }
+
+  /* ---------- SECTION SCAFFOLDING ---------- */
+  section.block { padding: 52px 0; border-bottom: 1px solid var(--line); }
+  .section-head { margin-bottom: 28px; max-width: 700px; }
+  .section-head .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--amber);
+  }
+  .section-head h2 { font-size: 25px; font-weight: 700; margin: 8px 0 0; }
+  .section-head p { color: var(--ink-soft); font-size: 14.5px; margin: 8px 0 0; }
+
+  /* ---------- CROSS-CUTTING CALLOUTS ---------- */
+  .cross-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .cross-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 20px 22px;
+    box-shadow: var(--shadow);
+  }
+  .cross-card .num {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--paper);
+    background: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 999px;
+  }
+  .cross-card h3 { font-size: 15.5px; font-weight: 700; margin: 12px 0 6px; }
+  .cross-card p { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
+  .cross-card .fact {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--amber);
+    font-weight: 600;
+  }
+
+  /* ---------- AUDIT GRID ---------- */
+  .audit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .audit-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 22px 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .audit-card .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .audit-card .head .idx { font-size: 12px; color: var(--ink-faint); font-weight: 600; }
+  .audit-card h3 { font-size: 17px; font-weight: 700; margin: 2px 0 0; }
+  .audit-card .titlewrap { flex: 1; }
+
+  .pill {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 4px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+  .pill.p0 { background: var(--ink); color: var(--paper); }
+  .pill.p1 { background: var(--amber-bg); color: var(--amber); border: 1px solid color-mix(in srgb, var(--amber) 35%, transparent); }
+  .pill.p2 { background: var(--slate-bg); color: var(--slate); }
+
+  .audit-card .rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+  .row { display: flex; gap: 9px; font-size: 13px; }
+  .row .mark { flex: 0 0 15px; font-weight: 700; padding-top: 1px; }
+  .row .mark.works { color: var(--emerald); }
+  .row .mark.weak { color: var(--amber); }
+  .row .mark.missing { color: var(--ink-faint); }
+  .row .txt { color: var(--ink); }
+  .row .txt b { font-weight: 600; }
+  .row.improve { margin-top: 2px; padding-top: 10px; border-top: 1px dashed var(--line); }
+  .row.improve .mark { color: var(--slate); }
+  .row.improve .txt { color: var(--ink-soft); font-style: italic; }
+
+  /* ---------- DATA STRATEGY ---------- */
+  .stat-banner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .stat-banner .big {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--amber-fill);
+    white-space: nowrap;
+  }
+  .stat-banner p { margin: 0; font-size: 13.5px; color: #d4d3d0; }
+
+  table.datatable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  table.datatable th, table.datatable td {
+    text-align: left;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.datatable thead th {
+    background: var(--surface-2);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  table.datatable tbody tr:last-child td { border-bottom: none; }
+  table.datatable tbody tr:hover { background: var(--surface-2); }
+  table.datatable td.field-list { color: var(--ink-soft); }
+  .status-chip {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .status-chip.have { background: var(--emerald-bg); color: var(--emerald); }
+  .status-chip.next { background: var(--amber-bg); color: var(--amber); }
+  .status-chip.later { background: var(--slate-bg); color: var(--slate); }
+
+  /* ---------- ROADMAP ---------- */
+  .roadmap { display: flex; flex-direction: column; gap: 0; }
+  .stage {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+  }
+  .roadmap .stage:first-child { border-top: none; }
+  .stage .label {
+    position: sticky;
+    top: 12px;
+  }
+  .stage .label .p {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+  }
+  .stage .label .name {
+    margin-top: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-wrap: balance;
+  }
+  .stage[data-p="0"] .label .p { color: var(--ink); }
+  .stage[data-p="1"] .label .p { color: var(--amber); }
+  .stage[data-p="2"] .label .p { color: var(--slate); }
+  .stage[data-p="3"] .label .p { color: var(--ink-faint); }
+
+  .stage .items { display: flex; flex-direction: column; gap: 10px; }
+  .item {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .item .n { color: var(--ink-faint); font-size: 12px; font-weight: 600; padding-top: 1px; }
+  .item .body b { display: block; font-weight: 600; margin-bottom: 2px; }
+  .item .body span { color: var(--ink-soft); font-size: 13px; }
+  .stage[data-p="0"] .item { border-color: color-mix(in srgb, var(--ink) 18%, var(--line)); }
+
+  /* ---------- FOOTER ---------- */
+  footer { padding: 46px 0 60px; }
+  footer .line {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    max-width: 600px;
+    text-wrap: balance;
+  }
+  footer .fine { margin-top: 10px; font-size: 12.5px; color: var(--ink-faint); }
+
+  @media (max-width: 820px) {
+    .cross-grid { grid-template-columns: 1fr; }
+    .audit-grid { grid-template-columns: 1fr; }
+    .stage { grid-template-columns: 1fr; gap: 10px; }
+    .stage .label { position: static; display: flex; align-items: baseline; gap: 8px; }
+  }
+</style>
+
+<div class="mast">
+  <div class="wrap">
+    <div class="brand">Procure<span>AI</span></div>
+    <div class="eyebrow"><span class="dot"></span>MVP audit &amp; roadmap · Milestone 2</div>
+    <h1>Is the core loop actually good yet?</h1>
+    <p class="sub">Ten checkpoints between &ldquo;I need to buy X&rdquo; and &ldquo;X was purchased at a good price,&rdquo; audited against the real code — not the vision. Three fixes show up in five checkpoints at once; those come first.</p>
+
+    <div class="flow mono">
+      <span class="step done">Requirement</span><span class="arrow">→</span>
+      <span class="step done">Discovery</span><span class="arrow">→</span>
+      <span class="step done">Evidence</span><span class="arrow">→</span>
+      <span class="step core">Matching &amp; ranking</span><span class="arrow">→</span>
+      <span class="step done">RFQ</span><span class="arrow">→</span>
+      <span class="step done">Quotes</span><span class="arrow">→</span>
+      <span class="step core">Comparison</span><span class="arrow">→</span>
+      <span class="step">Negotiation</span><span class="arrow">→</span>
+      <span class="step done">Award</span><span class="arrow">→</span>
+      <span class="step done">Purchase order</span><span class="arrow">→</span>
+      <span class="step">Delivery</span><span class="arrow">→</span>
+      <span class="step">Performance</span><span class="arrow">→</span>
+      <span class="step">Intelligence</span>
+    </div>
+    <div class="flow-legend">
+      <span><b>Built</b> — exists in code today</span>
+      <span><b>Amber</b> — this audit's focus</span>
+      <span><b>Grey</b> — later milestone, not started</span>
+    </div>
+  </div>
+</div>
+
+<div class="northstar">
+  <div class="wrap">
+    <div class="label">North star</div>
+    <blockquote>&ldquo;ProcureAI turns a procurement request into the best purchasing decision.&rdquo;</blockquote>
+    <div class="not-list">
+      <span>Not <s>&ldquo;we have 50 suppliers.&rdquo;</s></span>
+      <span>Not <s>&ldquo;we use AI.&rdquo;</s></span>
+      <span>Not even <s>&ldquo;we automate procurement.&rdquo;</s></span>
+    </div>
+  </div>
+</div>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">Read this first</div>
+      <h2>Three fixes, five checkpoints</h2>
+      <p>These aren't in any single box below — they cut across the loop, and fixing each one once pays off everywhere it's cited.</p>
+    </div>
+    <div class="cross-grid">
+      <div class="cross-card">
+        <span class="num">1</span>
+        <h3>The structured requirement dies after search</h3>
+        <p>Extraction produces certifications, construction (&ldquo;5-ply&rdquo;), material, and pricing basis — but the RFQ record, the supplier's response form, and the quote comparison view only ever read the old flat fields (<code>product</code>, <code>quantity</code>, <code>quality</code>). None of the precision the buyer saw during matching survives to the people actually quoting.</p>
+        <div class="fact">Affects checkpoints 1, 6, 7, 8, 9, 10</div>
+      </div>
+      <div class="cross-card">
+        <span class="num">2</span>
+        <h3>The quote link has no authentication</h3>
+        <p>A supplier's response link is <code>/respond/{id}?vendor={number}</code> — a plain, guessable integer, no per-invite secret. Anyone holding an RFQ link can submit or silently overwrite a quote as any invited supplier.</p>
+        <div class="fact">Undermines &ldquo;human decides&rdquo; at checkpoint 7</div>
+      </div>
+      <div class="cross-card">
+        <span class="num">3</span>
+        <h3>Performance data exists and is never used</h3>
+        <p>The supplier schema already has <code>rfqsReceived</code>, <code>ordersAwarded</code>, <code>onTimeDeliveryRate</code> — and the RFQ store already has every RFQ, quote and award. Nothing connects them. This is the cheapest path to &ldquo;learns from every transaction.&rdquo;</p>
+        <div class="fact">Sets up checkpoints 3, 4, 9 for later intelligence</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">Checkpoint by checkpoint</div>
+      <h2>What works, what's weak, what's missing</h2>
+      <p>Audited directly against <code>lib/extraction</code>, <code>lib/matching.ts</code>, <code>lib/store.ts</code>, <code>lib/scoring.ts</code>, and the RFQ/respond pages — not the intended design.</p>
+    </div>
+
+    <div class="audit-grid">
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">01</div><h3>Requirement understanding</h3></div>
+          <span class="pill p0">P0</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Span-based extraction with a real schema — quantity, unit, location, price basis, and structured specs (material, construction, certifications), each with a confidence level. 16 representative test cases pass.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">India-centric currency/location dictionaries; ambiguous dates (DD/MM) unresolved; no handling for a request naming two different products.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">No way for a buyer to see and correct the interpretation before it drives matching — whatever the parser produced is final.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Persist the structured result past search (cross-cutting #1); add a one-screen confirm/edit step.</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">02</div><h3>Supplier discovery</h3></div>
+          <span class="pill p1">P1</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Server-side search returns the full scored, tiered, reasoned result set; the structured requirement now actually reaches it.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">Discovery is a full-table scan and score, not an index — fine at 50 suppliers, won't hold at 500+.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">No incremental sourcing path and no way for a buyer to flag &ldquo;we need more suppliers here.&rdquo;</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Define a repeatable, per-category ingestion process; tie it to the fallback message (P1 #8).</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">03</div><h3>Supplier relevance</h3></div>
+          <span class="pill p0">P0</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Request-dependent scoring with hard-requirement gating (location, certs, MOQ, price) and a strong/potential/weak/no-match tier — verified across 7 different requirement styles.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">Keyword overlap can be fooled by a homonym (&ldquo;circuit boards&rdquo; loosely matched &ldquo;Angle Board&rdquo;) — caught, downgraded to weak, but a real ceiling on pure keyword matching.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">No learning loop yet — matching doesn't use which suppliers actually got quoted or awarded to improve future ranking.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Centerpiece of &ldquo;genuinely relevant&rdquo; — keep tightening as categories (P1) add real test surface.</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">04</div><h3>Evidence &amp; trust</h3></div>
+          <span class="pill p0">P0</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Evidence drawer with source/URL/date/confidence per field; an explicit &ldquo;no public evidence available&rdquo; state; confidence is computed, never hand-set.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">&ldquo;Verified by ProcureAI&rdquo; is a real badge in the UI, but nothing in the codebase can ever set a supplier to verified — currently permanent dead code.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt"><code>SupplierPerformance</code> exists in the schema but is null for all 50 — nothing computes it from the RFQ history that already exists.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Wire performance from real transaction history (cross-cutting #3) — nearly free, and it's the &ldquo;learns from every transaction&rdquo; thesis made real.</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">05</div><h3>Match explanations</h3></div>
+          <span class="pill p1">P1</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Every score traces to a structured explanation — matched capabilities, unmatched requirements, per-field fit — rendered as plain ✓/⚠ reasons. Nothing fabricated.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">Reasons describe supplier data accurately but tersely (&ldquo;Not confirmed: shipping, 5-ply&rdquo;) rather than in a buyer's own framing.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">The reasoning for why a supplier was invited doesn't survive onto the RFQ — by comparison time, it's gone.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Snapshot the match explanation onto the invited-supplier record; show it beside each quote.</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">06</div><h3>RFQ creation</h3></div>
+          <span class="pill p0">P0</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Multi-supplier invite straight from comparison, clean per-supplier links, a buyer-facing spec with a &ldquo;suppliers should provide&rdquo; checklist.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">The spec both sides see is built from flat legacy fields — a precise structured requirement degrades to a generic &ldquo;quality&rdquo; tag list.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">No buyer-set response deadline (only each supplier's own quote-validity date); no email delivery — links are copy-pasted by hand.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Same fix as checkpoint 1 — this is where its absence is most visible to a supplier.</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">07</div><h3>Supplier quote submission</h3></div>
+          <span class="pill p0">P0</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Real commercial fields — price, MOQ, lead time, shipping, tax, payment terms, validity — with the RFQ spec shown for context.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">No spec-compliance field — a supplier has no way to confirm (or flag a deviation from) a required certification.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt"><b>No authentication.</b> The link is <code>/respond/{id}?vendor={number}</code> — a bare, guessable id, no per-invite secret. Anyone with the RFQ link can quote as any invited supplier, or silently overwrite their quote.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Per-invite secret token before this goes anywhere beyond an internal demo (cross-cutting #2).</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">08</div><h3>Quote comparison</h3></div>
+          <span class="pill p1">P1</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">Automatic price/lead-time/payment-terms scoring, a plain-language recommendation line, live polling as quotes arrive.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">Scoring is relative between quotes only — it never checks a quote against the buyer's actual stated ceiling or required specs.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">No flag when a quoted quantity undercuts what was asked, or conflicts with the supplier's own MOQ; assumes one line item.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Reuse matching's hard-requirement model here instead of a separate, shallower score (cross-cutting #1 + #4).</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">09</div><h3>Award decision</h3></div>
+          <span class="pill p1">P1</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">One-click award from the ranked list; updates RFQ status; the UI hides re-awarding once one is made.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">&ldquo;Reasoning&rdquo; is one generic line, not the itemized evidence used earlier in matching — the loop's promise thins out right at the decision that matters most.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">No check against the buyer's hard requirements at award time (a quote missing the stated deadline awards with no warning); the API itself doesn't block a second award.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Bring matching's evidence-based reasoning to the award screen; add a pre-award mismatch summary.</span></div>
+      </div>
+
+      <div class="audit-card">
+        <div class="head">
+          <div class="titlewrap"><div class="idx mono">10</div><h3>Purchase order generation</h3></div>
+          <span class="pill p2">P2</span>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="mark works">✓</span><span class="txt">PO number, computed totals (subtotal + tax + shipping), a delivery-by date from lead time, a clean summary view.</span></div>
+          <div class="row"><span class="mark weak">△</span><span class="txt">If a supplier didn't quote a quantity, the fallback re-parses the buyer's original free-text string with a regex — duplicating work the structured extractor already did correctly.</span></div>
+          <div class="row"><span class="mark missing">–</span><span class="txt">No downloadable or shareable PO document — it only exists as a record on the RFQ page, though it's the artifact a buyer actually needs to send onward.</span></div>
+        </div>
+        <div class="row improve"><span class="mark">→</span><span class="txt">Correct once structured data flows through (checkpoint 1); a real exportable PO is the bigger open item.</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">Data strategy</div>
+      <h2>The dataset is the other half of &ldquo;relevant&rdquo;</h2>
+      <p>No matching algorithm invents evidence a supplier record doesn't have. Two separate gaps, and enrichment matters more than breadth right now.</p>
+    </div>
+
+    <div class="stat-banner">
+      <div class="big mono">0 / 50</div>
+      <p>Current suppliers with a public MOQ, price range, lead time, <em>or</em> certification on file. Every one is real (name, location, one sourced product line) — none can currently prove commercial or compliance fit, in any category.</p>
+    </div>
+
+    <div class="table-scroll">
+      <table class="datatable">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Fields to prioritize</th>
+            <th>Sourcing approach</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Corrugated packaging</b></td>
+            <td><span class="status-chip have">50 suppliers</span></td>
+            <td class="field-list">MOQ, price range, lead time, certifications — all currently null</td>
+            <td>Re-visit existing 50 records; enrich from supplier storefronts, not just directory listings</td>
+          </tr>
+          <tr>
+            <td><b>Office furniture &amp; fit-out</b></td>
+            <td><span class="status-chip next">0 suppliers</span></td>
+            <td class="field-list">Products, capabilities, MOQ, lead time, industries served</td>
+            <td>Same directory-sourcing discipline as packaging batch (IndiaMART-style, Bengaluru-first)</td>
+          </tr>
+          <tr>
+            <td><b>Electronics &amp; components</b></td>
+            <td><span class="status-chip next">0 suppliers</span></td>
+            <td class="field-list">Certifications (ISO 9001, RoHS), capacity, manufacturing status</td>
+            <td>Higher compliance bar — prioritize sources that publish certs, not just product lists</td>
+          </tr>
+          <tr>
+            <td><b>Industrial equipment</b></td>
+            <td><span class="status-chip next">0 suppliers</span></td>
+            <td class="field-list">Manufacturing capabilities, capacity, lead time</td>
+            <td>Fewer, higher-detail records over volume — this category lives on spec fit</td>
+          </tr>
+          <tr>
+            <td><b>Raw materials &amp; metals</b></td>
+            <td><span class="status-chip next">0 suppliers</span></td>
+            <td class="field-list">Materials/grades (&ldquo;304 stainless&rdquo;), pricing basis, MOQ</td>
+            <td>Grade-level product data matters more than company count here</td>
+          </tr>
+          <tr>
+            <td><b>Supplier performance</b> <span style="color:var(--ink-faint); font-weight:400;">(all categories)</span></td>
+            <td><span class="status-chip later">Schema only</span></td>
+            <td class="field-list">rfqsReceived, ordersAwarded, onTimeDeliveryRate — compute, don't source</td>
+            <td>Derive from <code>data/rfqs-store.json</code>, which already has this history</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">Prioritized roadmap</div>
+      <h2>P0 → P3</h2>
+      <p>P0 makes today's loop trustworthy end to end. P1 gives it something real to work with. P2 and P3 are the intelligence and OS layers — not this milestone, listed for sequence.</p>
+    </div>
+
+    <div class="roadmap">
+      <div class="stage" data-p="0">
+        <div class="label"><div class="p mono">P0</div><div class="name">Make the core loop trustworthy</div></div>
+        <div class="items">
+          <div class="item"><span class="n mono">01</span><div class="body"><b>Carry the structured requirement through the whole RFQ record</b><span>Persist it at creation; show it on the RFQ spec, the supplier response form, and quote comparison — not just during search.</span></div></div>
+          <div class="item"><span class="n mono">02</span><div class="body"><b>Secure the supplier response link</b><span>Per-invite secret token instead of a bare, guessable vendor id.</span></div></div>
+          <div class="item"><span class="n mono">03</span><div class="body"><b>Compute supplier performance from real history</b><span>rfqsReceived, quotesSubmitted, ordersAwarded, on-time rate — from data already in the RFQ store.</span></div></div>
+          <div class="item"><span class="n mono">04</span><div class="body"><b>Extend evidence-based reasoning into comparison and award</b><span>Reuse the matching engine's hard-requirement model for quotes, not a separate, shallower price/lead-time-only score.</span></div></div>
+          <div class="item"><span class="n mono">05</span><div class="body"><b>Add a requirement confirm/edit step</b><span>One screen between &ldquo;AI understood this&rdquo; and &ldquo;search suppliers&rdquo; — the only point a parser mistake can still be caught before it reaches a PO.</span></div></div>
+        </div>
+      </div>
+
+      <div class="stage" data-p="1">
+        <div class="label"><div class="p mono">P1</div><div class="name">Make the data powerful</div></div>
+        <div class="items">
+          <div class="item"><span class="n mono">06</span><div class="body"><b>Expand categories deliberately</b><span>Office furniture, electronics, industrial equipment, raw materials — same real-sourcing discipline as the packaging batch. No generated suppliers.</span></div></div>
+          <div class="item"><span class="n mono">07</span><div class="body"><b>Enrich before you broaden</b><span>MOQ, price range, lead time, certifications — for the 50 suppliers already in the database first. Bigger lever than new records right now.</span></div></div>
+          <div class="item"><span class="n mono">08</span><div class="body"><b>Turn the fallback message into an action</b><span>&ldquo;We don't have relevant suppliers&rdquo; should let a buyer request that category, not dead-end.</span></div></div>
+          <div class="item"><span class="n mono">09</span><div class="body"><b>RFQ deadlines and real delivery</b><span>A buyer-set response deadline, and something better than copy-paste links.</span></div></div>
+        </div>
+      </div>
+
+      <div class="stage" data-p="2">
+        <div class="label"><div class="p mono">P2</div><div class="name">Make ProcureAI intelligent</div></div>
+        <div class="items">
+          <div class="item"><span class="n mono">10</span><div class="body"><b>Price benchmarking</b><span>Only means something once P1's price-range data exists.</span></div></div>
+          <div class="item"><span class="n mono">11</span><div class="body"><b>Performance-weighted ranking</b><span>Feed P0's performance data back into supplier matching.</span></div></div>
+          <div class="item"><span class="n mono">12</span><div class="body"><b>Historical quote memory, negotiation assistant, savings prediction, real supplier verification</b><span>As specified — sequenced after the data and trust foundations above.</span></div></div>
+        </div>
+      </div>
+
+      <div class="stage" data-p="3">
+        <div class="label"><div class="p mono">P3</div><div class="name">Become the Procurement OS</div></div>
+        <div class="items">
+          <div class="item"><span class="n mono">13</span><div class="body"><b>Contracts, invoices, delivery tracking, approvals, ERP integrations, a supplier portal, autonomous agents</b><span>Unchanged from the long-term vision — correctly last, not attempted early.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="line">The loop already works end to end. It stops feeling like a demo the moment a buyer can trust every step of it — not just the first one.</div>
+    <div class="fine">Audit basis: lib/extraction/*, lib/matching.ts, lib/supplier-store.ts, lib/store.ts, lib/scoring.ts, app/api/rfqs/**, app/respond/[id], app/rfqs/[id] — read directly, September 2026. No code changed as part of this audit.</div>
+  </div>
+</footer>

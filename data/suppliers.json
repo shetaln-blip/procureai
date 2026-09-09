@@ -1,0 +1,3777 @@
+{
+  "suppliers": [
+    {
+      "id": 1,
+      "identity": {
+        "companyName": "Aryan Enterprises",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "5kg 3 Ply Corrugated Packaging Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.114Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "5kg 3 Ply Corrugated Packaging Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.114Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "aryan",
+      "mergedFrom": []
+    },
+    {
+      "id": 2,
+      "identity": {
+        "companyName": "ARK Corporation",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "4.4x4x2 Inch Plain Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.115Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "4.4x4x2 Inch Plain Corrugated Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.115Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "ark corporation",
+      "mergedFrom": []
+    },
+    {
+      "id": 3,
+      "identity": {
+        "companyName": "Packopedia",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Double Wall 5 Ply Brown Corrugated Shipping Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.115Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Double Wall 5 Ply Brown Corrugated Shipping Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.115Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "packopedia",
+      "mergedFrom": []
+    },
+    {
+      "id": 4,
+      "identity": {
+        "companyName": "Ecosoft",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Brown Kraft Paper 3 Ply Corrugated Packaging Boxes (8x4x4)"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.116Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Brown Kraft Paper 3 Ply Corrugated Packaging Boxes (8x4x4)"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.116Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "ecosoft",
+      "mergedFrom": []
+    },
+    {
+      "id": 5,
+      "identity": {
+        "companyName": "MM Will Care",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Single Wall 3 Ply Auto Lock Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.116Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Single Wall 3 Ply Auto Lock Corrugated Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.116Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "mm will care",
+      "mergedFrom": []
+    },
+    {
+      "id": 6,
+      "identity": {
+        "companyName": "Forever Diary India Private Limited",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Brown Flat Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.116Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Brown Flat Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.116Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "forever diary",
+      "mergedFrom": []
+    },
+    {
+      "id": 7,
+      "identity": {
+        "companyName": "Goldenstars Enterprises",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Double Wall 5 Ply Mustard Oil Corrugated Packaging Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.116Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Double Wall 5 Ply Mustard Oil Corrugated Packaging Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.116Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "goldenstars",
+      "mergedFrom": []
+    },
+    {
+      "id": 8,
+      "identity": {
+        "companyName": "Seaa Packaging Private Limited",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Single Wall 3 Ply Plain Corrugated Boxes"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.116Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Single Wall 3 Ply Plain Corrugated Boxes"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.116Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "seaa packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 9,
+      "identity": {
+        "companyName": "Unikube Kartons",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "3 Kg Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.116Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "3 Kg Corrugated Box"
+          },
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.116Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "unikube kartons",
+      "mergedFrom": [
+        51
+      ]
+    },
+    {
+      "id": 10,
+      "identity": {
+        "companyName": "Shree Parshwanath Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Corrugated Carton Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.116Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Corrugated Carton Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "shree parshwanath packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 11,
+      "identity": {
+        "companyName": "M I Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "8 Ply Corrugated Packaging Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "8 Ply Corrugated Packaging Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "m i packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 12,
+      "identity": {
+        "companyName": "Matrix Engineering Company",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Corrugated Box, Carton Box For PPF"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Corrugated Box, Carton Box For PPF"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "matrix engineering company",
+      "mergedFrom": []
+    },
+    {
+      "id": 13,
+      "identity": {
+        "companyName": "Prathamesh Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "9 Ply Corrugated Packaging Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "9 Ply Corrugated Packaging Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "prathamesh packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 14,
+      "identity": {
+        "companyName": "Chanchal Enterprises",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "3 Ply Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "3 Ply Corrugated Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "chanchal",
+      "mergedFrom": []
+    },
+    {
+      "id": 15,
+      "identity": {
+        "companyName": "City Prints & Packs",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "120 GSM Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "120 GSM Corrugated Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "city prints & packs",
+      "mergedFrom": []
+    },
+    {
+      "id": 16,
+      "identity": {
+        "companyName": "Saifi Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Triple Wall 5 Ply Corrugated Cartons Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Triple Wall 5 Ply Corrugated Cartons Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "saifi packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 17,
+      "identity": {
+        "companyName": "Nova Pack Care",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Single Wall 3 Ply Fruit Corrugated Paper Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Single Wall 3 Ply Fruit Corrugated Paper Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "nova pack care",
+      "mergedFrom": []
+    },
+    {
+      "id": 18,
+      "identity": {
+        "companyName": "Image Print Process",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Corrugated Cartons Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Corrugated Cartons Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "image print process",
+      "mergedFrom": []
+    },
+    {
+      "id": 19,
+      "identity": {
+        "companyName": "Boxpool LLP",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Double Wall 5 Ply Regular Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Double Wall 5 Ply Regular Corrugated Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "boxpool",
+      "mergedFrom": []
+    },
+    {
+      "id": 20,
+      "identity": {
+        "companyName": "Shree Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Plain Corrugated Packaging Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Plain Corrugated Packaging Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "shree packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 21,
+      "identity": {
+        "companyName": "Maurya Enterprises",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Laminated Corrugated Boxes"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Laminated Corrugated Boxes"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "maurya",
+      "mergedFrom": []
+    },
+    {
+      "id": 22,
+      "identity": {
+        "companyName": "SKN Industries",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "150 GSM Corrugated Carton Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "150 GSM Corrugated Carton Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "skn",
+      "mergedFrom": []
+    },
+    {
+      "id": 23,
+      "identity": {
+        "companyName": "Square Solutions",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "8x6x4 Inch 3 Ply Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "8x6x4 Inch 3 Ply Corrugated Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "square solutions",
+      "mergedFrom": []
+    },
+    {
+      "id": 24,
+      "identity": {
+        "companyName": "Kutlery Ventures",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "5 Ply Kraft Paper Corrugated Cartons Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "5 Ply Kraft Paper Corrugated Cartons Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "kutlery ventures",
+      "mergedFrom": []
+    },
+    {
+      "id": 25,
+      "identity": {
+        "companyName": "R.V. Enterprises",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Corrugated Cartons Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Corrugated Cartons Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "rv",
+      "mergedFrom": []
+    },
+    {
+      "id": 26,
+      "identity": {
+        "companyName": "S N V Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Regular Slotted Corrugated Box, Kraft Paper"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Regular Slotted Corrugated Box, Kraft Paper"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "s n v packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 27,
+      "identity": {
+        "companyName": "A-One Packaging Co.",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Corrugated Boxes"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Corrugated Boxes"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "a-one packaging co",
+      "mergedFrom": []
+    },
+    {
+      "id": 28,
+      "identity": {
+        "companyName": "Surana Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Mango Packaging Corrugated Box"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://dir.indiamart.com/bengaluru/corrugated-boxes.html",
+            "sourceName": "IndiaMART — Corrugated Box Suppliers in Bengaluru (directory)",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.117Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories",
+              "capabilities.products"
+            ],
+            "snippet": "Mango Packaging Corrugated Box"
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.117Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "surana packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 29,
+      "identity": {
+        "companyName": "Accupack Private Limited",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "accupack",
+      "mergedFrom": []
+    },
+    {
+      "id": 30,
+      "identity": {
+        "companyName": "Adarsh Packagers",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "adarsh packagers",
+      "mergedFrom": []
+    },
+    {
+      "id": 31,
+      "identity": {
+        "companyName": "Adarsha Packaging Private Limited",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "adarsha packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 32,
+      "identity": {
+        "companyName": "Adishwar Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "adishwar packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 33,
+      "identity": {
+        "companyName": "Afnosh Enterprises",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "afnosh",
+      "mergedFrom": []
+    },
+    {
+      "id": 34,
+      "identity": {
+        "companyName": "Agile Engineering and Packaging Private Limited",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "agile engineering and packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 35,
+      "identity": {
+        "companyName": "AIW Cartons",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "aiw cartons",
+      "mergedFrom": []
+    },
+    {
+      "id": 36,
+      "identity": {
+        "companyName": "Akruthi Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "akruthi packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 37,
+      "identity": {
+        "companyName": "Akshaya Packaging Industries",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "akshaya packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 38,
+      "identity": {
+        "companyName": "Andromeda Packaging Private Limited",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "andromeda packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 39,
+      "identity": {
+        "companyName": "Ashish Packaging Industries",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "ashish packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 40,
+      "identity": {
+        "companyName": "Astra Pack",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "astra pack",
+      "mergedFrom": []
+    },
+    {
+      "id": 41,
+      "identity": {
+        "companyName": "B&B Triple Wall Containers Limited",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "b&b triple wall containers",
+      "mergedFrom": []
+    },
+    {
+      "id": 42,
+      "identity": {
+        "companyName": "Bag Factory",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "bag factory",
+      "mergedFrom": []
+    },
+    {
+      "id": 43,
+      "identity": {
+        "companyName": "Bahety Converters",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.118Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.118Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "bahety converters",
+      "mergedFrom": []
+    },
+    {
+      "id": 44,
+      "identity": {
+        "companyName": "Balaji Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.120Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "balaji packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 45,
+      "identity": {
+        "companyName": "Balaji Packaging Company",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.120Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "balaji packaging company",
+      "mergedFrom": []
+    },
+    {
+      "id": 46,
+      "identity": {
+        "companyName": "Balaji Packaging Industries",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.120Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "balaji packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 47,
+      "identity": {
+        "companyName": "Best Cartons",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.120Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "best cartons",
+      "mergedFrom": []
+    },
+    {
+      "id": 48,
+      "identity": {
+        "companyName": "Bhargav Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.120Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "bhargav packaging",
+      "mergedFrom": []
+    },
+    {
+      "id": 49,
+      "identity": {
+        "companyName": "Canara Paper Products",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": null
+        },
+        "location": "Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [],
+        "productDescription": "",
+        "manufacturingStatus": "unknown",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": null,
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://kacbma.com/members-directory/",
+            "sourceName": "Karnataka Corrugated Box Manufacturers Association (KACBMA) — Members Directory",
+            "sourceType": "industry_association",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "capabilities.categories"
+            ],
+            "snippet": "Listed as a member company on the KACBMA members directory."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.120Z",
+        "dataConfidence": "low",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "industry_association",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "canara paper products",
+      "mergedFrom": []
+    },
+    {
+      "id": 50,
+      "identity": {
+        "companyName": "Marudhar Packaging",
+        "legalName": null,
+        "website": null,
+        "contact": {
+          "email": null,
+          "phone": "07942796808"
+        },
+        "location": "Bengaluru, Karnataka",
+        "citiesServed": []
+      },
+      "capabilities": {
+        "categories": [
+          "Packaging",
+          "Corrugated packaging"
+        ],
+        "products": [
+          "Packaging Box",
+          "Corrugated Box",
+          "Carton Box",
+          "Plastic Courier Bag",
+          "Corrugated Roll",
+          "Angle Board",
+          "Stretch Film",
+          "Cardboard Box",
+          "Bopp Tape",
+          "Shipping Labels",
+          "Bubble Wrap",
+          "Air Bubble Roll",
+          "Zip Lock Bags"
+        ],
+        "productDescription": "",
+        "manufacturingStatus": "manufacturer",
+        "manufacturingCapabilities": [],
+        "customizationCapabilities": [],
+        "industriesServed": [
+          "FMCG",
+          "Garment",
+          "Food",
+          "Plastic",
+          "Automotive"
+        ],
+        "capacity": null
+      },
+      "commercial": {
+        "moq": null,
+        "priceRange": null,
+        "currency": "INR",
+        "leadTime": null,
+        "shippingRegions": [],
+        "paymentTerms": [],
+        "quoteAvailable": true
+      },
+      "compliance": {
+        "certifications": [],
+        "gstNumber": "29AAXFM8984G1Z4",
+        "isoCertifications": [],
+        "otherCertifications": [],
+        "complianceDocuments": []
+      },
+      "intelligence": {
+        "sources": [
+          {
+            "url": "https://www.marudharpackagings.com/",
+            "sourceName": "Marudhar Packaging — company storefront",
+            "sourceType": "public_directory",
+            "retrievedAt": "2026-09-07T12:57:18.120Z",
+            "fields": [
+              "identity.companyName",
+              "identity.location",
+              "identity.contact.phone",
+              "capabilities.categories",
+              "capabilities.products",
+              "capabilities.manufacturingStatus",
+              "capabilities.industriesServed",
+              "compliance.gstNumber"
+            ],
+            "snippet": "No 31 and 32, Doddanna Industrial Estate Main Road, I.P. Nagar, Bengaluru - 560058. Nature: Manufacturer. Industries served: FMCG, Garment, Food, Plastic, Automotive. GST: 29AAXFM8984G1Z4."
+          }
+        ],
+        "lastUpdated": "2026-09-07T12:57:18.120Z",
+        "dataConfidence": "medium",
+        "publicRating": null,
+        "reviewCount": 0,
+        "performance": null
+      },
+      "sourcing": {
+        "method": "public_directory",
+        "verification": {
+          "status": "unverified",
+          "verifiedAt": null
+        }
+      },
+      "dedupeKey": "marudhar packaging",
+      "mergedFrom": []
+    }
+  ]
+}
