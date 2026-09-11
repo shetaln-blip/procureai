@@ -60,6 +60,7 @@ export type DateEntity = BaseEntity & {
 
 export type KeywordCategory =
   | "quality"
+  | "pricing"
   | "sustainability"
   | "customization"
   | "packaging"
@@ -472,7 +473,10 @@ function resolveAbsoluteDate(monthName: string, day: number, year: number | null
 
   if (Number.isNaN(date.getTime())) return null;
 
-  return date.toISOString().slice(0, 10);
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const dayOfMonth = String(date.getDate()).padStart(2, "0");
+
+  return `${date.getFullYear()}-${month}-${dayOfMonth}`;
 }
 
 function extractDateEntities(text: string, referenceDate: Date): DateEntity[] {
@@ -828,9 +832,14 @@ const KEYWORD_DICTIONARY: { category: KeywordCategory; phrases: string[] }[] = [
     category: "quality",
     phrases: [
       "premium quality", "high quality", "good quality", "industrial grade",
-      "commercial grade", "food grade", "medical grade", "export quality",
+      "good-quality", "premium-quality", "high-quality", "commercial grade",
+      "food grade", "medical grade", "export quality",
       "durable",
     ],
+  },
+  {
+    category: "pricing",
+    phrases: ["competitive pricing", "competitive prices", "competitive price"],
   },
   {
     category: "sustainability",

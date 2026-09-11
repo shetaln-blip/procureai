@@ -32,6 +32,7 @@ export type SupplierFacingRequirement = {
   material: string | null;
   construction: string[];
   qualityRequirements: string[];
+  pricingPreferences: string[];
   sustainabilityRequirements: string[];
   certifications: string[];
   requiredCapabilities: string[];
@@ -84,6 +85,7 @@ export function toSupplierFacingRequirement(
     material: specifications.material.value,
     construction: specifications.construction,
     qualityRequirements: specifications.qualityRequirements,
+    pricingPreferences: specifications.pricingPreferences,
     sustainabilityRequirements: specifications.sustainabilityRequirements,
     certifications: specifications.certifications,
     requiredCapabilities: specifications.requiredCapabilities,

@@ -293,6 +293,38 @@ export default function RFQDetailPage() {
           {rfq.requirements.product || rfq.query}
         </h1>
 
+        <div className="mt-6 grid gap-2 sm:grid-cols-3">
+          {[
+            { step: "1", label: "Select suppliers", active: true },
+            { step: "2", label: "Send RFQ", active: true },
+            {
+              step: "3",
+              label: "Receive and compare quotes",
+              active: rfq.quotes.length > 0,
+            },
+          ].map(({ step, label, active }) => (
+            <div
+              key={step}
+              className={`flex items-center gap-3 rounded-md border px-4 py-3 ${
+                active
+                  ? "border-zinc-300 bg-white text-zinc-900"
+                  : "border-zinc-200 bg-zinc-50 text-zinc-400"
+              }`}
+            >
+              <span
+                className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
+                  active
+                    ? "bg-zinc-950 text-white"
+                    : "border border-zinc-300 text-zinc-400"
+                }`}
+              >
+                {step}
+              </span>
+              <span className="text-sm font-medium">{label}</span>
+            </div>
+          ))}
+        </div>
+
         {/* RFQ SPEC */}
         <div className="mt-8 rounded-md border border-zinc-200 bg-white p-7">
           <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
@@ -315,6 +347,7 @@ export default function RFQDetailPage() {
               <SpecField label="Material" value={sr.material ?? ""} />
               <SpecField label="Construction" value={joinList(sr.construction)} />
               <SpecField label="Quality requirements" value={joinList(sr.qualityRequirements)} />
+              <SpecField label="Pricing preference" value={joinList(sr.pricingPreferences)} />
               <SpecField
                 label="Sustainability requirements"
                 value={joinList(sr.sustainabilityRequirements)}
@@ -517,13 +550,27 @@ export default function RFQDetailPage() {
           >
             {recommendation.quote ? (
               <>
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-                  {recommendation.caveat ? "Closest option" : "Recommended"}
-                </p>
-                <p className="mt-1 font-medium">
-                  {recommendation.quote.vendorName} —{" "}
-                  {summarizeReasons(recommendation.quote.reasons)}
-                </p>
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                      {recommendation.caveat ? "Closest option" : "Recommended quote"}
+                    </p>
+                    <p className="mt-1 font-display text-xl font-semibold">
+                      {recommendation.quote.vendorName}
+                    </p>
+                    <p className="mt-1 text-sm text-zinc-600">
+                      {summarizeReasons(recommendation.quote.reasons)}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                      Landed cost
+                    </p>
+                    <p className="font-display text-2xl font-bold text-zinc-950">
+                      {formatCurrency(recommendation.quote.cost.total)}
+                    </p>
+                  </div>
+                </div>
                 {recommendation.caveat && (
                   <p className="mt-1 text-sm text-zinc-600">
                     {recommendation.caveat}
@@ -767,6 +814,20 @@ export default function RFQDetailPage() {
                       </p>
                     )}
 
+                    {rfq.status !== "awarded" &&
+                      (quote.moqCompatible === false ||
+                        quote.deadlineCompatible === false ||
+                        quote.cost.total === null) && (
+                        <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                          <span className="font-semibold">Review before awarding:</span>{" "}
+                          {quote.cost.total === null
+                            ? "the landed cost cannot be calculated from the supplied data."
+                            : quote.moqCompatible === false
+                              ? "the MOQ is above the buyer's requested quantity."
+                              : "the stated lead time may miss the buyer's deadline."}
+                        </div>
+                      )}
+
                     {rfq.status !== "awarded" && (
                       <div className="mt-5 flex justify-end border-t border-zinc-100 pt-5">
                         <button
@@ -776,7 +837,7 @@ export default function RFQDetailPage() {
                         >
                           {awarding === quote.id
                             ? "Awarding…"
-                            : "Award & generate PO"}
+                            : "Award this quote · Generate PO"}
                         </button>
                       </div>
                     )}
@@ -804,6 +865,11 @@ export default function RFQDetailPage() {
             <h2 className="mt-2 font-display text-2xl font-semibold">
               {rfq.purchaseOrder.poNumber}
             </h2>
+
+            <p className="mt-2 text-sm text-emerald-700">
+              Purchase order created successfully. The award is now locked to{" "}
+              {rfq.purchaseOrder.vendorName}.
+            </p>
 
             <div className="mt-5 grid gap-5 sm:grid-cols-3">
               <QuoteDetail

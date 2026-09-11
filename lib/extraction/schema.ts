@@ -52,6 +52,7 @@ export type ProcurementSpecifications = {
   // Construction/build descriptors like "5-ply", "3-layer", "10-inch".
   construction: string[];
   qualityRequirements: string[];
+  pricingPreferences: string[];
   sustainabilityRequirements: string[];
   certifications: string[];
   requiredCapabilities: string[];

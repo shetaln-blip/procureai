@@ -155,6 +155,7 @@ const DANGLING_TRAILING_CONNECTORS =
 // anywhere else in the phrase.
 const TRAILING_SUPPLIER_NOISE =
   /\s+(?:from\s+)?(?:reliable|verified|trusted|good|quality)?\s*(?:suppliers?|vendors?)\s*$/i;
+const TRAILING_PREFERENCE_INTRO = /\s+i\s+want\s*$/i;
 
 function cleanupProductText(text: string): string {
   let result = text.replace(/\s+/g, " ").trim();
@@ -170,6 +171,7 @@ function cleanupProductText(text: string): string {
   // a connector that was gluing it to the rest of the phrase.
   for (let i = 0; i < 2; i++) {
     result = result.replace(TRAILING_SUPPLIER_NOISE, "");
+    result = result.replace(TRAILING_PREFERENCE_INTRO, "");
     result = result.replace(DANGLING_LEADING_CONNECTORS, "");
     result = result.replace(DANGLING_TRAILING_CONNECTORS, "");
   }

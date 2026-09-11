@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { MatchedSupplier, SearchMeta } from "@/lib/matching";
 import type { ProcurementRequirement } from "@/lib/extraction/schema";
+import type { RetrievalMeta } from "@/lib/moss/types";
 import type { SupplierPerformance } from "@/lib/supplier-types";
 
 // Realistic, person-centered example requests (Quote Intelligence
@@ -30,7 +31,7 @@ const suggestions: { label: string; query: string }[] = [
   {
     label: "CNC milling machines",
     query:
-      "I need 25 five-axis CNC milling machines for our manufacturing unit",
+      "I need 25 commercial 5-axis CNC milling machines with automatic tool changers, delivered to Hyderabad within 45 days.",
   },
 ];
 
@@ -67,6 +68,15 @@ const emptyRequirements: Requirements = {
   quality: "",
   additionalRequirements: [],
 };
+
+type AnalysisStage = "idle" | "understanding" | "retrieving" | "matching" | "evidence";
+
+const ANALYSIS_STAGES: { key: Exclude<AnalysisStage, "idle">; label: string }[] = [
+  { key: "understanding", label: "Understanding requirements" },
+  { key: "retrieving", label: "Searching suppliers with Moss" },
+  { key: "matching", label: "Matching suppliers" },
+  { key: "evidence", label: "Checking evidence" },
+];
 
 // Shared style tokens — keeps the "no filled pills, no soft shadows"
 // design language consistent across every card/chip/button in this file.
@@ -287,6 +297,13 @@ export default function Home() {
     MatchedSupplier[]
   >([]);
   const [matchMeta, setMatchMeta] = useState<SearchMeta | null>(null);
+  const [retrievalMeta, setRetrievalMeta] = useState<RetrievalMeta | null>(
+    null
+  );
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [analysisStage, setAnalysisStage] = useState<AnalysisStage>("idle");
+  const [selectionNotice, setSelectionNotice] = useState<string | null>(null);
+  const [saveNotice, setSaveNotice] = useState<string | null>(null);
   // id -> company name for every supplier in the catalog, independent of
   // the current search. Needed for the saved-requests dashboard, which can
   // reference suppliers from a past search that isn't the current result
@@ -299,19 +316,24 @@ export default function Home() {
   // so the first client render matches the server-rendered HTML before
   // localStorage is read).
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("procureai_requests");
+    const timeoutId = window.setTimeout(() => {
+      try {
+        const stored = localStorage.getItem("procureai_requests");
 
-      if (stored) {
-        const parsed = JSON.parse(stored);
+        if (stored) {
+          const parsed = JSON.parse(stored);
 
-        if (Array.isArray(parsed)) {
-          setSavedRequests(parsed);
+          if (Array.isArray(parsed)) {
+            setSavedRequests(parsed);
+          }
         }
+      } catch (error) {
+        console.error("Could not load saved requests:", error);
       }
-    } catch (error) {
-      console.error("Could not load saved requests:", error);
-    }
+
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, []);
 
   // Load RFQ count for the nav badge
@@ -364,6 +386,9 @@ export default function Home() {
     setShowResults(false);
     setSelectedVendorId(null);
     setCompareIds([]);
+    setSearchError(null);
+    setSelectionNotice(null);
+    setAnalysisStage("understanding");
 
     try {
       const response = await fetch("/api/analyze", {
@@ -391,6 +416,7 @@ export default function Home() {
       }
 
       setRequirements(data);
+      setAnalysisStage("retrieving");
 
       const searchResponse = await fetch("/api/suppliers/search", {
         method: "POST",
@@ -400,12 +426,31 @@ export default function Home() {
         body: JSON.stringify(data),
       });
 
-      const searchData = await searchResponse.json();
+      const searchText = await searchResponse.text();
+      let searchData: {
+        suppliers?: MatchedSupplier[];
+        meta?: SearchMeta;
+        retrieval?: RetrievalMeta;
+        error?: string;
+      };
 
+      try {
+        searchData = JSON.parse(searchText);
+      } catch {
+        throw new Error("The supplier search service returned an invalid response.");
+      }
+
+      if (!searchResponse.ok) {
+        throw new Error(searchData.error || "Failed to search suppliers.");
+      }
+
+      setAnalysisStage("matching");
       setMatchedSuppliers(
         Array.isArray(searchData.suppliers) ? searchData.suppliers : []
       );
       setMatchMeta(searchData.meta ?? null);
+      setRetrievalMeta(searchData.retrieval ?? null);
+      setAnalysisStage("evidence");
       setShowResults(true);
 
       setTimeout(() => {
@@ -418,14 +463,15 @@ export default function Home() {
       }, 100);
     } catch (error) {
       console.error(error);
-
-      alert(
+      setSearchError(
         error instanceof Error
           ? error.message
-          : "Something went wrong while analyzing your request."
+          : "Something went wrong while searching suppliers."
       );
+
     } finally {
       setLoading(false);
+      setAnalysisStage("idle");
     }
   };
 
@@ -491,7 +537,7 @@ export default function Home() {
       }
 
       if (current.length >= 5) {
-        alert("You can select up to 5 suppliers at once.");
+        setSelectionNotice("You can select up to 5 suppliers at once.");
         return current;
       }
 
@@ -539,7 +585,7 @@ export default function Home() {
 
       router.push(`/rfqs/${data.id}`);
     } catch (error) {
-      alert(
+      setSelectionNotice(
         error instanceof Error
           ? error.message
           : "Something went wrong while sending the RFQ."
@@ -559,7 +605,7 @@ export default function Home() {
     );
 
     if (alreadySaved) {
-      alert("This request is already saved.");
+      setSaveNotice("This request is already saved.");
       return;
     }
 
@@ -578,7 +624,7 @@ export default function Home() {
       ...savedRequests,
     ]);
 
-    alert("Request saved successfully.");
+    setSaveNotice("Request saved.");
   };
 
   const openSavedRequest = async (
@@ -605,6 +651,7 @@ export default function Home() {
         Array.isArray(data.suppliers) ? data.suppliers : []
       );
       setMatchMeta(data.meta ?? null);
+      setRetrievalMeta(data.retrieval ?? null);
     } catch {
       setMatchedSuppliers([]);
       setMatchMeta(null);
@@ -661,8 +708,8 @@ export default function Home() {
     <main className="min-h-screen bg-zinc-50 text-zinc-950">
 
       {/* NAVBAR */}
-      <nav className="bg-zinc-950">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
+      <nav className="border-b border-[#26262B] bg-[#0A0A0C]">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-8">
 
           <button
             onClick={() => {
@@ -673,12 +720,12 @@ export default function Home() {
                 behavior: "smooth",
               });
             }}
-            className="font-display text-xl font-semibold tracking-tight text-white"
+            className="font-ledger-serif text-xl font-medium tracking-tight text-[#F2F1EC]"
           >
             Procure<span className="text-amber-500">AI</span>
           </button>
 
-          <div className="flex items-center gap-8 text-sm text-zinc-400">
+          <div className="hidden items-center gap-6 font-ledger-mono text-[11px] uppercase tracking-[0.02em] text-[#9C9A93] sm:flex sm:gap-8">
 
             <button
               onClick={() => {
@@ -689,14 +736,14 @@ export default function Home() {
                   behavior: "smooth",
                 });
               }}
-              className="transition hover:text-white"
+              className="transition hover:text-[#F2F1EC]"
             >
               Dashboard
             </button>
 
             <a
               href="#suppliers"
-              className="transition hover:text-white"
+              className="transition hover:text-[#F2F1EC]"
             >
               Vendors
             </a>
@@ -708,7 +755,7 @@ export default function Home() {
               Requests
 
               {savedRequests.length > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1 text-[11px] font-semibold text-zinc-950">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#7C8FE0] px-1 text-[10px] font-semibold text-[#0A0A0C]">
                   {savedRequests.length}
                 </span>
               )}
@@ -716,30 +763,22 @@ export default function Home() {
 
             <Link
               href="/rfqs"
-              className="relative flex items-center gap-2 transition hover:text-white"
+              className="relative flex items-center gap-2 transition hover:text-[#F2F1EC]"
             >
               RFQs
 
               {rfqCount > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1 text-[11px] font-semibold text-zinc-950">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#7C8FE0] px-1 text-[10px] font-semibold text-[#0A0A0C]">
                   {rfqCount}
                 </span>
               )}
             </Link>
 
             <button
-              onClick={() => {
-                setShowRequests(false);
-
-                document
-                  .getElementById("procurement-search")
-                  ?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-              }}
-              className="rounded-full bg-amber-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400"
+              type="button"
+              className="hidden rounded-md border border-[#38383F] px-4 py-2 text-[#F2F1EC] transition hover:border-[#7C8FE0] hover:text-[#7C8FE0] sm:block"
             >
-              Get started
+              Sign in
             </button>
 
           </div>
@@ -943,37 +982,74 @@ export default function Home() {
           {/* HERO */}
           <section
             id="procurement-search"
-            className="bg-zinc-950 pb-24 pt-16"
+            className="bg-[#0A0A0C] pb-24 pt-16"
           >
 
             <div className="mx-auto max-w-5xl px-8">
 
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                AI Procurement Intelligence
+              <div className="flex items-center gap-2 font-ledger-mono text-[11px] font-medium uppercase tracking-[0.02em] text-[#9C9A93]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#7C8FE0]" />
+                Procurement intelligence / workspace
               </div>
 
-              <h1 className="mt-5 max-w-2xl font-display text-5xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl">
-                What do you need to{" "}
-                <span className="text-amber-500">
-                  procure?
+              <h1 className="mt-5 max-w-3xl font-ledger-serif text-5xl font-medium leading-[1.02] tracking-tight text-[#F2F1EC] sm:text-7xl">
+                Turn a requirement into a{" "}
+                <span className="italic text-[#7C8FE0]">
+                  supplier shortlist.
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-400">
-                Describe what you&apos;re looking for in plain
-                English. ProcureAI will understand your
-                requirements and find the best supplier
-                matches.
+              <p className="mt-6 max-w-[54ch] font-ledger-sans text-base leading-7 text-[#9C9A93] sm:text-lg">
+                Describe what you need in plain English. ProcureAI extracts
+                the buying brief, finds evidence-backed matches, and helps
+                you move from shortlist to RFQ.
               </p>
+
+              <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#686660]">
+                <span>01 Understand the brief</span>
+                <span>02 Match suppliers</span>
+                <span>03 Compare quotes</span>
+              </div>
 
             </div>
 
             {/* SEARCH — floats up over the hero/workspace boundary */}
             <div className="relative z-10 mx-auto -mb-24 mt-10 max-w-4xl px-8">
 
-              <div className="rounded-md border border-zinc-200 bg-white p-3">
+              <div className="rounded-lg border border-[#38383F] bg-[#131316] p-3">
 
+                <div className="mb-4 grid border-b border-[#26262B] sm:grid-cols-3">
+                  {[
+                    ["01", "Understand the brief"],
+                    ["02", "Find supplier matches"],
+                    ["03", "Compare quotes"],
+                  ].map(([number, label], index) => (
+                    <div
+                      key={number}
+                      className={`flex items-center gap-3 border-[#26262B] px-3 py-3 font-ledger-mono text-[10px] uppercase tracking-[0.02em] sm:px-4 ${
+                        index < 2 ? "border-b sm:border-b-0 sm:border-r" : ""
+                      }`}
+                    >
+                      <span
+                        className={`flex h-6 w-7 items-center justify-center rounded-md ${
+                          index === 0
+                            ? "bg-[#7C8FE0] text-[#0A0A0C]"
+                            : "border border-[#38383F] text-[#686660]"
+                        }`}
+                      >
+                        {number}
+                      </span>
+                      <span className={index === 0 ? "text-[#F2F1EC]" : "text-[#686660]"}>
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <label className="block px-2 sm:px-4">
+                  <span className="font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#9C9A93]">
+                    Procurement requirement
+                  </span>
                 <textarea
                   value={query}
                   onChange={(e) => {
@@ -981,12 +1057,13 @@ export default function Home() {
                     setShowResults(false);
                   }}
                   placeholder="Example: I need 500 recyclable custom 5-ply boxes for cosmetics shipping, delivered to Hyderabad within 3 weeks, under ₹12 per box..."
-                  className="min-h-32 w-full resize-none border-none bg-transparent px-4 py-3 text-lg outline-none placeholder:text-zinc-400"
+                  className="min-h-32 w-full resize-none border-none bg-transparent py-3 font-ledger-sans text-lg leading-7 text-[#F2F1EC] outline-none placeholder:text-[#686660]"
                 />
+                </label>
 
-                <div className="flex items-center justify-between border-t border-zinc-100 px-3 pt-3">
+                <div className="flex flex-col items-start justify-between gap-3 border-t border-[#26262B] px-3 pt-3 sm:flex-row sm:items-center sm:px-4">
 
-                  <div className="text-sm text-zinc-400">
+                  <div className="font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#686660]">
                     {query.length > 0
                       ? `${query.length} characters`
                       : "Describe your procurement requirement"}
@@ -995,25 +1072,74 @@ export default function Home() {
                   <button
                     onClick={handleAnalyze}
                     disabled={loading}
-                    className={pillPrimary}
+                    className="rounded-md bg-[#7C8FE0] px-5 py-3 font-ledger-mono text-[11px] font-semibold uppercase tracking-[0.02em] text-[#0A0A0C] transition hover:bg-[#9AA8EE] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {loading
-                      ? "Analyzing…"
-                      : "Find suppliers"}
+                      ? "Building shortlist…"
+                      : "Find supplier matches →"}
                   </button>
 
                 </div>
               </div>
+
+              {loading && (
+                <div className="mt-3 rounded-lg border border-[#38383F] bg-[#1B1B1F] px-5 py-4 text-white">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-sm font-semibold">
+                      Preparing your supplier shortlist
+                    </p>
+                    <span className="text-xs text-zinc-400">
+                      {ANALYSIS_STAGES.find((stage) => stage.key === analysisStage)?.label}
+                    </span>
+                  </div>
+                  <div className="mt-4 grid gap-2 sm:grid-cols-4">
+                    {ANALYSIS_STAGES.map((stage, index) => {
+                      const activeIndex = ANALYSIS_STAGES.findIndex(
+                        (item) => item.key === analysisStage
+                      );
+                      const complete = index < activeIndex;
+                      const active = stage.key === analysisStage;
+
+                      return (
+                        <div key={stage.key} className="flex items-center gap-2 text-xs">
+                          <span
+                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+                              complete
+                                ? "border-emerald-500 bg-emerald-500 text-zinc-950"
+                                : active
+                                  ? "border-amber-500 text-amber-400"
+                                  : "border-zinc-700 text-zinc-500"
+                            }`}
+                          >
+                            {complete ? "✓" : index + 1}
+                          </span>
+                          <span className={active ? "text-white" : "text-zinc-500"}>
+                            {stage.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {searchError && (
+                <div className="mt-6 rounded-md border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+                  Supplier search failed: {searchError}
+                </div>
+              )}
+
             </div>
           </section>
 
-          <div className="mx-auto max-w-5xl px-8">
-            <div className="mx-auto max-w-4xl pt-28">
+          <div className="-mt-24 bg-[#0A0A0C] px-6 pb-12 sm:px-8">
+            <div className="mx-auto max-w-5xl pt-28">
+              <div className="mx-auto max-w-4xl">
 
               {/* SUGGESTIONS */}
               <div className="flex flex-wrap justify-center gap-3">
 
-                <span className="mr-1 py-2 text-sm text-zinc-400">
+                <span className="mr-1 py-2 font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#686660]">
                   Try searching:
                 </span>
 
@@ -1021,19 +1147,20 @@ export default function Home() {
                   <button
                     key={suggestion.label}
                     onClick={() => setQuery(suggestion.query)}
-                    className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm text-zinc-600 transition hover:border-zinc-950 hover:text-zinc-950"
+                    className="rounded-full border border-[#38383F] px-4 py-2 text-sm text-[#9C9A93] transition hover:border-[#7C8FE0] hover:text-[#F2F1EC]"
                   >
                     {suggestion.label}
                   </button>
                 ))}
 
               </div>
+              </div>
 
               {/* RESULTS */}
               {showResults && (
                 <div
                   id="suppliers"
-                  className="mt-12 pb-24"
+                  className="mt-12 bg-zinc-50 px-6 pb-24 pt-8 sm:px-8"
                 >
 
                   {/* REQUIREMENT */}
@@ -1059,6 +1186,12 @@ export default function Home() {
 
                   </div>
 
+                  {saveNotice && (
+                    <div className="mb-5 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                      {saveNotice}
+                    </div>
+                  )}
+
                   {/* Concise, human-readable procurement brief — the
                       complete intent in one line, not just the product
                       category. Never fabricates a clause for a field
@@ -1067,60 +1200,41 @@ export default function Home() {
                     {buildProcurementBrief(requirements)}
                   </p>
 
-                  <div className="mb-10 grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
-
-                    <Requirement
-                      label="Quantity"
-                      value={
-                        requirements.quantity ||
-                        "Not specified"
-                      }
-                    />
-
-                    <Requirement
-                      label="Destination"
-                      value={
-                        requirements.location ||
-                        "Not specified"
-                      }
-                    />
-
-                    <Requirement
-                      label="Deadline"
-                      value={
-                        requirements.deadline ||
-                        "Not specified"
-                      }
-                    />
-
-                    <Requirement
-                      label="Budget"
-                      value={
-                        requirements.budget ||
-                        "Not specified"
-                      }
-                    />
-
-                    <Requirement
-                      label="Specifications"
-                      value={buildSpecificationsSummary(requirements)}
-                    />
-
-                    <Requirement
-                      label="Use case"
-                      value={
-                        requirements.structured?.intendedUse.value ||
-                        "Not specified"
-                      }
-                    />
-
+                  <div className="mb-6 rounded-md border border-zinc-200 bg-white p-5">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      <Requirement
+                        label="Product"
+                        value={
+                          requirements.structured?.product.value ||
+                          requirements.product ||
+                          "Not specified"
+                        }
+                      />
+                      <Requirement label="Quantity" value={requirements.quantity || "Not specified"} />
+                      <Requirement label="Destination" value={requirements.location || "Not specified"} />
+                      <Requirement label="Deadline" value={requirements.deadline || "Not specified"} />
+                      <Requirement
+                        label="Quality preference"
+                        value={
+                          requirements.structured?.specifications.qualityRequirements.join(", ") ||
+                          "Not specified"
+                        }
+                      />
+                      <Requirement
+                        label="Pricing preference"
+                        value={
+                          requirements.structured?.specifications.pricingPreferences.join(", ") ||
+                          "Not specified"
+                        }
+                      />
+                    </div>
                   </div>
 
                   {/* EXTRA REQUIREMENTS — Deadline and Specifications now
-                      have their own row in the brief grid above, so this
-                      panel is just the remaining raw detail (packaging,
-                      shipping, capability, and certification phrases)
-                      that doesn't fit a dedicated row. */}
+                      are already represented in the structured summary
+                      above, so this panel is just the remaining raw detail
+                      (packaging, shipping, capability, and certification
+                      phrases) that doesn't fit a dedicated row. */}
                   {requirements.additionalRequirements.length > 0 && (
 
                     <div className="mb-10 rounded-md border border-zinc-200 bg-white p-6">
@@ -1177,13 +1291,66 @@ export default function Home() {
 
                   </div>
 
-                  {/* FALLBACK / DATASET-COVERAGE MESSAGE — shown instead
-                      of pretending irrelevant suppliers are good matches
-                      when the database doesn't have enough (or any)
-                      strong matches for this specific requirement. */}
-                  {matchMeta?.message && (
-                    <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
-                      {matchMeta.message}
+                  {retrievalMeta && (
+                    <div
+                      className={`mb-6 flex flex-wrap items-center justify-between gap-3 rounded-md border px-4 py-3 ${
+                        retrievalMeta.method === "moss"
+                          ? "border-zinc-200 bg-zinc-50"
+                          : "border-amber-200 bg-amber-50"
+                      }`}
+                    >
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                          Retrieval source
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-zinc-900">
+                          {retrievalMeta.method === "moss"
+                            ? "Moss retrieval"
+                            : `Catalog scan fallback${
+                                retrievalMeta.fallbackReason
+                                  ? ` · ${retrievalMeta.fallbackReason.replace(/_/g, " ")}`
+                                  : ""
+                              }`}
+                        </p>
+                      </div>
+                      <span className="text-xs font-medium text-zinc-600">
+                        {retrievalMeta.method === "moss"
+                          ? `${retrievalMeta.mossCandidates} candidates recalled · ${retrievalMeta.hydrated} suppliers matched`
+                          : `${retrievalMeta.hydrated} suppliers scanned`}
+                      </span>
+                    </div>
+                  )}
+
+                  {matchMeta && (
+                    <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 px-5 py-4 text-zinc-900">
+                      {matchMeta.strong === 0 && (
+                        <p className="font-display text-lg font-semibold">
+                          No suppliers fully match your requirements yet.
+                        </p>
+                      )}
+
+                      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                        <span className="font-semibold">
+                          {matchMeta.strong} strong match
+                          {matchMeta.strong === 1 ? "" : "es"}
+                        </span>
+                        <span className="font-semibold text-amber-800">
+                          {matchMeta.potential} potential match
+                          {matchMeta.potential === 1 ? "" : "es"}
+                        </span>
+                        {matchMeta.weak > 0 && (
+                          <span className="text-zinc-600">
+                            {matchMeta.weak} weak match
+                            {matchMeta.weak === 1 ? "" : "es"}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="mt-2 max-w-3xl text-sm leading-6 text-amber-900/80">
+                        Potential matches have partial evidence for your
+                        requirements and should be verified directly with the
+                        supplier before you send an RFQ.
+                      </p>
                     </div>
                   )}
 
@@ -1236,6 +1403,12 @@ export default function Home() {
 
                       </div>
 
+                    </div>
+                  )}
+
+                  {selectionNotice && (
+                    <div className="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                      {selectionNotice}
                     </div>
                   )}
 
@@ -1297,18 +1470,21 @@ export default function Home() {
                                       {vendor.identity.companyName}
                                     </h3>
 
-                                    {vendor.intelligence.sources.length > 0 && (
+                                    {vendor.sourcing.verification.status ===
+                                      "verified" ? (
                                       <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
                                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                                        Publicly sourced
+                                        Verified / evidence-backed
                                       </span>
-                                    )}
-
-                                    {vendor.sourcing.verification.status ===
-                                      "verified" && (
+                                    ) : vendor.intelligence.sources.length > 0 ? (
                                       <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
                                         <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                                        Verified by ProcureAI
+                                        Public evidence found · Not independently verified
+                                      </span>
+                                    ) : (
+                                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+                                        No public evidence available
                                       </span>
                                     )}
 
@@ -1351,6 +1527,11 @@ export default function Home() {
                                   ]}
                                 </p>
 
+                                <p className="mt-2 max-w-[220px] text-[10px] leading-4 text-zinc-400">
+                                  Based on product, specifications, use case,
+                                  location, and requirement completeness.
+                                </p>
+
                               </div>
 
                             </div>
@@ -1363,8 +1544,8 @@ export default function Home() {
 
                             {/* WHY IT MATCHED */}
                             {vendor.reasons.length > 0 && (
-                              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5">
-                                {vendor.reasons.map((reason, reasonIndex) => (
+                              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                                {vendor.reasons.slice(0, 4).map((reason, reasonIndex) => (
                                   <li
                                     key={reasonIndex}
                                     className={`flex items-center gap-1.5 text-xs font-medium ${
@@ -1381,6 +1562,19 @@ export default function Home() {
                                 ))}
                               </ul>
                             )}
+
+                            {requirements.location &&
+                              vendor.explanation.locationMatch !== "match" && (
+                                <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
+                                  <p className="text-xs font-semibold uppercase tracking-wider text-amber-900">
+                                    Destination: {requirements.location}
+                                  </p>
+                                  <p className="mt-1 text-sm font-medium text-amber-900">
+                                    ⚠ {requirements.location} delivery
+                                    capability not confirmed
+                                  </p>
+                                </div>
+                              )}
 
                             {/* DATA */}
                             <div className="mt-5 grid gap-4 border-t border-zinc-100 pt-5 sm:grid-cols-4">
@@ -1493,18 +1687,21 @@ export default function Home() {
                       {selectedVendor.identity.companyName}
                     </h2>
 
-                    {selectedVendor.intelligence.sources.length > 0 && (
+                    {selectedVendor.sourcing.verification.status ===
+                      "verified" ? (
                       <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                        Publicly sourced
+                        Verified / evidence-backed
                       </span>
-                    )}
-
-                    {selectedVendor.sourcing.verification.status ===
-                      "verified" && (
+                    ) : selectedVendor.intelligence.sources.length > 0 ? (
                       <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
                         <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                        Verified by ProcureAI
+                        Public evidence found · Not independently verified
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                        <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+                        No public evidence available
                       </span>
                     )}
 

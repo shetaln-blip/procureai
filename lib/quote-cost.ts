@@ -159,3 +159,65 @@ export function parseOptionalNumber(value: unknown): number | null {
   const num = Number(value);
   return Number.isFinite(num) ? num : null;
 }
+
+function isSupplied(value: unknown): boolean {
+  return !(
+    value === null ||
+    value === undefined ||
+    (typeof value === "string" && value.trim() === "")
+  );
+}
+
+export function validateQuoteNumbers(input: {
+  unitPrice: unknown;
+  leadTimeDays: unknown;
+  quotedQuantity: unknown;
+  moq: unknown;
+  shippingCost: unknown;
+  taxPercent: unknown;
+}): string | null {
+  const required = [
+    ["unit price", input.unitPrice, true],
+    ["lead time", input.leadTimeDays, true],
+  ] as const;
+
+  for (const [label, value] of required) {
+    const parsed = Number(value);
+
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      return `${label} must be greater than 0.`;
+    }
+  }
+
+  const positiveOptional = [
+    ["quoted quantity", input.quotedQuantity],
+  ] as const;
+
+  for (const [label, value] of positiveOptional) {
+    if (!isSupplied(value)) continue;
+
+    const parsed = Number(value);
+
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      return `${label} must be greater than 0 when supplied.`;
+    }
+  }
+
+  const nonNegativeOptional = [
+    ["MOQ", input.moq],
+    ["shipping", input.shippingCost],
+    ["tax", input.taxPercent],
+  ] as const;
+
+  for (const [label, value] of nonNegativeOptional) {
+    if (!isSupplied(value)) continue;
+
+    const parsed = Number(value);
+
+    if (!Number.isFinite(parsed) || parsed < 0) {
+      return `${label} must be null, blank, or greater than or equal to 0.`;
+    }
+  }
+
+  return null;
+}

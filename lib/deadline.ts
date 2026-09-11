@@ -19,7 +19,10 @@ export function resolveDeadlineDate(rfq: RFQ): Date | null {
   if (!timeframe) return null;
 
   if (timeframe.kind === "absolute" && timeframe.absoluteDate) {
-    const parsed = new Date(timeframe.absoluteDate);
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(timeframe.absoluteDate);
+    const parsed = match
+      ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+      : new Date(timeframe.absoluteDate);
     return Number.isFinite(parsed.getTime()) ? parsed : null;
   }
 

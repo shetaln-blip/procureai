@@ -6,7 +6,7 @@ import {
   type ResolvedInvitation,
 } from "@/lib/store";
 import { toSupplierFacingRequirement } from "@/lib/extraction/supplier-view";
-import { parseOptionalNumber } from "@/lib/quote-cost";
+import { parseOptionalNumber, validateQuoteNumbers } from "@/lib/quote-cost";
 
 // The single endpoint the public /respond/[id] page talks to (P0 #1 +
 // P0 #2). Authenticates every request against the supplier's own
@@ -106,9 +106,18 @@ export async function POST(
     const unitPrice = Number(body?.unitPrice);
     const leadTimeDays = Number(body?.leadTimeDays);
 
-    if (!unitPrice || unitPrice <= 0 || !leadTimeDays || leadTimeDays <= 0) {
+    const validationError = validateQuoteNumbers({
+      unitPrice: body?.unitPrice,
+      leadTimeDays: body?.leadTimeDays,
+      quotedQuantity: body?.quotedQuantity,
+      moq: body?.moq,
+      shippingCost: body?.shippingCost,
+      taxPercent: body?.taxPercent,
+    });
+
+    if (validationError) {
       return NextResponse.json(
-        { error: "Unit price and lead time are required." },
+        { error: validationError },
         { status: 400 }
       );
     }
@@ -121,7 +130,7 @@ export async function POST(
       vendorId: supplier.vendorId,
       vendorName: supplier.vendorName,
       unitPrice,
-      quotedQuantity: Number(body?.quotedQuantity) || 0,
+      quotedQuantity: parseOptionalNumber(body?.quotedQuantity) ?? 0,
       // Missing/blank stays `null`, not 0 — see lib/quote-cost.ts. Only
       // an explicit 0 means "no minimum" / "free shipping" / "0% tax".
       moq: parseOptionalNumber(body?.moq),

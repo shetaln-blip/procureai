@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { matchSuppliers, type SearchCriteria } from "@/lib/matching";
-import { getSupplierRepository } from "@/lib/supplier-store";
+import { recallSuppliers } from "@/lib/moss/retrieve";
 
 // A very light shape check on `body.structured` — just enough to avoid
 // passing a malformed client payload into the matcher as if it were a
@@ -41,10 +41,14 @@ export async function POST(request: Request) {
         : null,
     };
 
-    const suppliers = await getSupplierRepository().searchSuppliers();
+    const { suppliers, retrieval } = await recallSuppliers(criteria);
     const { suppliers: matched, meta } = matchSuppliers(suppliers, criteria);
 
-    return NextResponse.json({ suppliers: matched, meta });
+    return NextResponse.json({
+      suppliers: matched,
+      meta,
+      retrieval,
+    });
   } catch (error) {
     console.error("Supplier search failed:", error);
 

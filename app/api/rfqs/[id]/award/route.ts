@@ -19,6 +19,13 @@ export async function POST(
     const result = await awardRFQ(id, body.quoteId);
 
     if (!result.ok) {
+      if (result.reason === "already_awarded") {
+        return NextResponse.json(
+          { error: "This RFQ has already been awarded and cannot be awarded again." },
+          { status: 409 }
+        );
+      }
+
       if (result.reason === "uncomputable") {
         return NextResponse.json(
           {

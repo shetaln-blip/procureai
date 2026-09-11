@@ -263,6 +263,7 @@ function RespondPage() {
               <SpecField label="Material" value={sr.material ?? ""} />
               <SpecField label="Construction" value={joinList(sr.construction)} />
               <SpecField label="Quality requirements" value={joinList(sr.qualityRequirements)} />
+              <SpecField label="Pricing preference" value={joinList(sr.pricingPreferences)} />
               <SpecField
                 label="Sustainability requirements"
                 value={joinList(sr.sustainabilityRequirements)}
@@ -347,7 +348,11 @@ function RespondPage() {
           </div>
         ) : (
           <div className="mt-8 rounded-md border border-zinc-200 bg-white p-7">
-            <h2 className="font-display font-semibold">Your quote</h2>
+            <h2 className="font-display text-xl font-semibold">Your quote</h2>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-500">
+              Share the price and delivery terms you can commit to. Blank
+              optional fields remain unspecified for the buyer to confirm.
+            </p>
 
             <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <Field label="Unit price (₹)" required>

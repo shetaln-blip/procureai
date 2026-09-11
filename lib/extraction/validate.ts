@@ -66,6 +66,7 @@ export function validateRequirement(
   const bucketed: [string, string[]][] = [
     ["construction", requirement.specifications.construction],
     ["qualityRequirements", requirement.specifications.qualityRequirements],
+    ["pricingPreferences", requirement.specifications.pricingPreferences],
     ["sustainabilityRequirements", requirement.specifications.sustainabilityRequirements],
     ["certifications", requirement.specifications.certifications],
     ["requiredCapabilities", requirement.specifications.requiredCapabilities],

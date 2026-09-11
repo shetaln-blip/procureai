@@ -15,6 +15,7 @@ import {
   verifyInvitationToken,
 } from "./invitations";
 import { calculateQuoteCost, getRequestedQuantity } from "./quote-cost";
+import { resolveDeadlineDate } from "./deadline";
 
 // File-backed store for RFQs and quotes. There's no database configured
 // for this project yet, so this keeps everything in a single JSON file
@@ -193,6 +194,7 @@ export async function addQuote(
 export type AwardResult =
   | { ok: true; rfq: RFQ }
   | { ok: false; reason: "not_found" }
+  | { ok: false; reason: "already_awarded" }
   | { ok: false; reason: "uncomputable" };
 
 export async function awardRFQ(
@@ -203,6 +205,7 @@ export async function awardRFQ(
   const rfq = rfqs.find((item) => item.id === id);
 
   if (!rfq) return { ok: false, reason: "not_found" };
+  if (rfq.status === "awarded") return { ok: false, reason: "already_awarded" };
 
   const quote = rfq.quotes.find((item) => item.id === quoteId);
 
@@ -241,7 +244,8 @@ export async function awardRFQ(
     taxAmount: cost.taxAmount,
     totalValue: Math.round(cost.total),
     paymentTerms: quote.paymentTerms,
-    deliveryBy: addDays(quote.leadTimeDays),
+    deliveryBy: resolveDeadlineDate(rfq)?.toISOString().slice(0, 10) ??
+      addDays(quote.leadTimeDays),
     createdAt: new Date().toISOString(),
   };
 

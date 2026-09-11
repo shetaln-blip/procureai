@@ -82,6 +82,7 @@ export function classifyEntities(
   const certEntities = allOf(entities, "certification") as CertificationEntity[];
   const techSpecEntities = allOf(entities, "technical_spec") as TechnicalSpecEntity[];
   const qualityEntities = allOf(entities, "quality") as KeywordEntity[];
+  const pricingEntities = allOf(entities, "pricing") as KeywordEntity[];
   const sustainabilityEntities = allOf(entities, "sustainability") as KeywordEntity[];
   const customizationEntities = allOf(entities, "customization") as KeywordEntity[];
   const packagingEntities = allOf(entities, "packaging") as KeywordEntity[];
@@ -188,6 +189,7 @@ export function classifyEntities(
         : nullField<string>(),
       construction: dedupe(techSpecEntities.map((e) => e.value)),
       qualityRequirements: dedupe(qualityEntities.map((e) => e.value)),
+      pricingPreferences: dedupe(pricingEntities.map((e) => e.value)),
       sustainabilityRequirements: dedupe(sustainabilityEntities.map((e) => e.value)),
       certifications: dedupe(certEntities.map((e) => e.value)),
       requiredCapabilities: dedupe(capabilityEntities.map((e) => e.value)),

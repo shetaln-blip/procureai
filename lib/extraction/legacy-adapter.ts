@@ -79,6 +79,7 @@ export function toLegacyRequirements(result: ExtractionResult): LegacyRequiremen
   ].join(", ");
 
   const additionalRequirements = [
+    ...specifications.pricingPreferences,
     ...specifications.customizationRequirements,
     ...specifications.packagingRequirements,
     ...specifications.shippingRequirements,

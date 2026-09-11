@@ -1,6 +1,7 @@
 // Manual end-to-end check of the full pipeline:
 //   raw query -> extraction (lib/extraction) -> legacy-adapter -> matching (lib/matching)
-// against the REAL supplier dataset (data/suppliers.json), for the 7
+// against the REAL combined supplier repository (every data/suppliers
+// JSON file, via lib/supplier-store.ts), for the 7
 // requirement categories the audit asked to be tested. This is not an
 // automated pass/fail suite (there's no "correct" ranking to assert
 // against on real, sparse, publicly-sourced data) — it's here to
@@ -9,12 +10,10 @@
 // dataset has no relevant suppliers.
 //
 // Run with: npx tsx scripts/test-matching.ts
-import { promises as fs } from "fs";
-import path from "path";
 import { extractProcurementRequirement } from "../lib/extraction/pipeline";
 import { toLegacyRequirements } from "../lib/extraction/legacy-adapter";
 import { matchSuppliers, type SearchCriteria } from "../lib/matching";
-import type { Supplier } from "../lib/supplier-types";
+import { getSupplierRepository } from "../lib/supplier-store";
 
 const QUERIES: { label: string; query: string }[] = [
   { label: "1. Corrugated packaging (specific: 5-ply)", query: "Need 5000 5-ply corrugated shipping boxes, delivered to Bengaluru" },
@@ -27,13 +26,8 @@ const QUERIES: { label: string; query: string }[] = [
   { label: "7. No relevant supplier in database", query: "Looking for a supplier of industrial robotic arms for our assembly line" },
 ];
 
-async function loadSuppliers(): Promise<Supplier[]> {
-  const raw = await fs.readFile(
-    path.join(process.cwd(), "data", "suppliers.json"),
-    "utf-8"
-  );
-  const parsed = JSON.parse(raw);
-  return Array.isArray(parsed?.suppliers) ? parsed.suppliers : [];
+async function loadSuppliers() {
+  return getSupplierRepository().listSuppliers();
 }
 
 async function main() {
