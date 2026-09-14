@@ -7,6 +7,20 @@ import type { MatchedSupplier, SearchMeta } from "@/lib/matching";
 import type { ProcurementRequirement } from "@/lib/extraction/schema";
 import type { RetrievalMeta } from "@/lib/moss/types";
 import type { SupplierPerformance } from "@/lib/supplier-types";
+import {
+  Badge,
+  Button,
+  buttonClasses,
+  Card,
+  EmptyState,
+  Modal,
+  ModalCloseButton,
+  Notice,
+  PageHeader,
+  Table,
+  Th,
+  Td,
+} from "@/components/ui";
 
 // Realistic, person-centered example requests (Quote Intelligence
 // Audit's companion product change) — replacing the old broad category
@@ -77,17 +91,6 @@ const ANALYSIS_STAGES: { key: Exclude<AnalysisStage, "idle">; label: string }[] 
   { key: "matching", label: "Matching suppliers" },
   { key: "evidence", label: "Checking evidence" },
 ];
-
-// Shared style tokens — keeps the "no filled pills, no soft shadows"
-// design language consistent across every card/chip/button in this file.
-const chip =
-  "rounded-md border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600";
-const pillPrimary =
-  "rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50";
-const pillDark =
-  "rounded-full bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800";
-const pillOutline =
-  "rounded-full border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 transition hover:border-zinc-950 hover:text-zinc-950";
 
 // Supplier fields are increasingly `string | null` now that they carry
 // real (possibly missing) public data instead of always-filled placeholder
@@ -187,10 +190,10 @@ const TIER_LABEL: Record<string, string> = {
   weak: "Weak match — verify capability",
 };
 
-const TIER_BADGE_CLASS: Record<string, string> = {
-  strong: "text-emerald-700",
-  potential: "text-amber-700",
-  weak: "text-zinc-500",
+const TIER_BADGE_TONE: Record<string, "success" | "warning" | "neutral"> = {
+  strong: "success",
+  potential: "warning",
+  weak: "neutral",
 };
 
 // Human-readable labels for the dot-path field ids that
@@ -700,15 +703,33 @@ export default function Home() {
     );
   };
 
+  const navigateToSuppliers = () => {
+    const scrollToTarget = () => {
+      const targetId = showResults ? "suppliers" : "procurement-search";
+      document.getElementById(targetId)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
+    if (showRequests) {
+      setShowRequests(false);
+      window.setTimeout(scrollToTarget, 0);
+      return;
+    }
+
+    scrollToTarget();
+  };
+
   const getVendorName = (id: number) => {
     return supplierNames[id] || "Supplier";
   };
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950">
+    <main className="min-h-screen bg-bg text-text-primary">
 
       {/* NAVBAR */}
-      <nav className="border-b border-[#26262B] bg-[#0A0A0C]">
+      <nav className="border-b border-border bg-bg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-8">
 
           <button
@@ -720,12 +741,12 @@ export default function Home() {
                 behavior: "smooth",
               });
             }}
-            className="font-ledger-serif text-xl font-medium tracking-tight text-[#F2F1EC]"
+            className="font-ledger-serif text-xl font-medium tracking-tight text-text-primary"
           >
-            Procure<span className="text-amber-500">AI</span>
+            Procure<span className="text-accent">AI</span>
           </button>
 
-          <div className="hidden items-center gap-6 font-ledger-mono text-[11px] uppercase tracking-[0.02em] text-[#9C9A93] sm:flex sm:gap-8">
+          <div className="hidden items-center gap-6 font-ledger-mono text-[11px] uppercase tracking-[0.02em] text-text-secondary sm:flex sm:gap-8">
 
             <button
               onClick={() => {
@@ -736,26 +757,27 @@ export default function Home() {
                   behavior: "smooth",
                 });
               }}
-              className="transition hover:text-[#F2F1EC]"
+              className="transition hover:text-text-primary"
             >
               Dashboard
             </button>
 
-            <a
-              href="#suppliers"
-              className="transition hover:text-[#F2F1EC]"
+            <button
+              type="button"
+              onClick={navigateToSuppliers}
+              className="transition hover:text-text-primary"
             >
-              Vendors
-            </a>
+              Suppliers
+            </button>
 
             <button
               onClick={() => setShowRequests(true)}
-              className="relative flex items-center gap-2 transition hover:text-white"
+              className="relative flex items-center gap-2 transition hover:text-text-primary"
             >
               Requests
 
               {savedRequests.length > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#7C8FE0] px-1 text-[10px] font-semibold text-[#0A0A0C]">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-accent-contrast">
                   {savedRequests.length}
                 </span>
               )}
@@ -763,23 +785,16 @@ export default function Home() {
 
             <Link
               href="/rfqs"
-              className="relative flex items-center gap-2 transition hover:text-[#F2F1EC]"
+              className="relative flex items-center gap-2 transition hover:text-text-primary"
             >
               RFQs
 
               {rfqCount > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#7C8FE0] px-1 text-[10px] font-semibold text-[#0A0A0C]">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-accent-contrast">
                   {rfqCount}
                 </span>
               )}
             </Link>
-
-            <button
-              type="button"
-              className="hidden rounded-md border border-[#38383F] px-4 py-2 text-[#F2F1EC] transition hover:border-[#7C8FE0] hover:text-[#7C8FE0] sm:block"
-            >
-              Sign in
-            </button>
 
           </div>
         </div>
@@ -789,78 +804,41 @@ export default function Home() {
       {showRequests && (
         <section className="mx-auto max-w-6xl px-8 py-16">
 
-          <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <PageHeader
+            eyebrow="Procurement workspace"
+            title="Saved requests"
+            description="Revisit previous procurement requirements and supplier matches."
+            actions={
+              <>
+                {savedRequests.length > 0 && (
+                  <Button variant="secondary" onClick={clearAllRequests}>
+                    Clear all
+                  </Button>
+                )}
 
-            <div>
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                Procurement workspace
-              </div>
+                <Button variant="secondary" onClick={() => setShowRequests(false)}>
+                  New request
+                </Button>
+              </>
+            }
+          />
 
-              <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight">
-                Saved requests
-              </h1>
-
-              <p className="mt-3 text-zinc-500">
-                Revisit previous procurement requirements
-                and supplier matches.
-              </p>
-            </div>
-
-            <div className="flex gap-3">
-
-              {savedRequests.length > 0 && (
-                <button
-                  onClick={clearAllRequests}
-                  className={pillOutline}
-                >
-                  Clear all
-                </button>
-              )}
-
-              <button
-                onClick={() => setShowRequests(false)}
-                className={pillDark}
-              >
-                New request
-              </button>
-
-            </div>
-          </div>
-
+          <div className="mt-10">
           {savedRequests.length === 0 ? (
-            <div className="rounded-md border border-dashed border-zinc-300 bg-white px-8 py-20 text-center">
-
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-md border border-zinc-200 text-2xl text-zinc-400">
-                +
-              </div>
-
-              <h2 className="mt-5 font-display text-xl font-semibold">
-                No saved requests yet
-              </h2>
-
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-500">
-                Analyze a procurement requirement and
-                save it here to build your procurement
-                history.
-              </p>
-
-              <button
-                onClick={() => setShowRequests(false)}
-                className={`mt-6 ${pillPrimary}`}
-              >
-                Create your first request
-              </button>
-
-            </div>
+            <EmptyState
+              title="No saved requests yet"
+              description="Analyze a procurement requirement and save it here to build your procurement history."
+              action={
+                <Button variant="primary" onClick={() => setShowRequests(false)}>
+                  Create your first request
+                </Button>
+              }
+            />
           ) : (
             <div className="grid gap-4">
 
               {savedRequests.map((request) => (
-                <div
-                  key={request.id}
-                  className="rounded-md border border-zinc-200 bg-white p-6"
-                >
+                <Card key={request.id} padding="md">
 
                   <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
 
@@ -868,50 +846,50 @@ export default function Home() {
 
                       <div className="flex flex-wrap items-center gap-3">
 
-                        <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-                          <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+                        <span className="eyebrow text-text-secondary">
+                          <span className="eyebrow-dot bg-text-secondary" />
                           Procurement request
                         </span>
 
-                        <span className="text-xs text-zinc-400">
+                        <span className="text-xs text-text-tertiary">
                           {formatDate(request.createdAt)}
                         </span>
 
                       </div>
 
-                      <h3 className="mt-3 font-display text-lg font-semibold">
+                      <h3 className="mt-3 font-ledger-serif text-lg font-medium text-text-primary">
                         {request.requirements.product ||
                           request.query}
                       </h3>
 
-                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-500">
+                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-text-secondary">
                         {request.query}
                       </p>
 
                       <div className="mt-4 flex flex-wrap gap-2">
 
                         {request.requirements.quantity && (
-                          <span className={chip}>
+                          <Badge tone="neutral">
                             {request.requirements.quantity}
-                          </span>
+                          </Badge>
                         )}
 
                         {request.requirements.location && (
-                          <span className={chip}>
+                          <Badge tone="neutral">
                             {request.requirements.location}
-                          </span>
+                          </Badge>
                         )}
 
                         {request.requirements.budget && (
-                          <span className={chip}>
+                          <Badge tone="neutral">
                             {request.requirements.budget}
-                          </span>
+                          </Badge>
                         )}
 
                         {request.requirements.deadline && (
-                          <span className={chip}>
+                          <Badge tone="neutral">
                             {request.requirements.deadline}
-                          </span>
+                          </Badge>
                         )}
 
                       </div>
@@ -920,7 +898,7 @@ export default function Home() {
                       {request.topVendorIds.length > 0 && (
                         <div className="mt-5">
 
-                          <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                          <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
                             Top supplier matches
                           </p>
 
@@ -928,13 +906,10 @@ export default function Home() {
 
                             {request.topVendorIds.map(
                               (vendorId, index) => (
-                                <span
-                                  key={vendorId}
-                                  className={chip}
-                                >
+                                <Badge key={vendorId} tone="neutral">
                                   #{index + 1}{" "}
                                   {getVendorName(vendorId)}
-                                </span>
+                                </Badge>
                               )
                             )}
 
@@ -946,32 +921,33 @@ export default function Home() {
 
                     <div className="flex shrink-0 gap-2">
 
-                      <button
+                      <Button
+                        variant="secondary"
                         onClick={() =>
                           openSavedRequest(request)
                         }
-                        className={pillDark}
                       >
                         Open request
-                      </button>
+                      </Button>
 
-                      <button
+                      <Button
+                        variant="danger"
                         onClick={() =>
                           deleteSavedRequest(request.id)
                         }
-                        className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-500 transition hover:border-red-300 hover:text-red-600"
                       >
                         Delete
-                      </button>
+                      </Button>
 
                     </div>
 
                   </div>
-                </div>
+                </Card>
               ))}
 
             </div>
           )}
+          </div>
 
         </section>
       )}
@@ -982,30 +958,30 @@ export default function Home() {
           {/* HERO */}
           <section
             id="procurement-search"
-            className="bg-[#0A0A0C] pb-24 pt-16"
+            className="bg-bg pb-24 pt-16"
           >
 
             <div className="mx-auto max-w-5xl px-8">
 
-              <div className="flex items-center gap-2 font-ledger-mono text-[11px] font-medium uppercase tracking-[0.02em] text-[#9C9A93]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#7C8FE0]" />
+              <div className="eyebrow text-text-secondary">
+                <span className="eyebrow-dot bg-accent" />
                 Procurement intelligence / workspace
               </div>
 
-              <h1 className="mt-5 max-w-3xl font-ledger-serif text-5xl font-medium leading-[1.02] tracking-tight text-[#F2F1EC] sm:text-7xl">
+              <h1 className="mt-5 max-w-3xl font-ledger-serif text-5xl font-medium leading-[1.02] tracking-tight text-text-primary sm:text-7xl">
                 Turn a requirement into a{" "}
-                <span className="italic text-[#7C8FE0]">
+                <span className="italic text-accent">
                   supplier shortlist.
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-[54ch] font-ledger-sans text-base leading-7 text-[#9C9A93] sm:text-lg">
+              <p className="mt-6 max-w-[54ch] text-base leading-7 text-text-secondary sm:text-lg">
                 Describe what you need in plain English. ProcureAI extracts
                 the buying brief, finds evidence-backed matches, and helps
                 you move from shortlist to RFQ.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#686660]">
+              <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-text-tertiary">
                 <span>01 Understand the brief</span>
                 <span>02 Match suppliers</span>
                 <span>03 Compare quotes</span>
@@ -1016,9 +992,9 @@ export default function Home() {
             {/* SEARCH — floats up over the hero/workspace boundary */}
             <div className="relative z-10 mx-auto -mb-24 mt-10 max-w-4xl px-8">
 
-              <div className="rounded-lg border border-[#38383F] bg-[#131316] p-3">
+              <div className="rounded-lg border border-border-strong bg-surface p-3">
 
-                <div className="mb-4 grid border-b border-[#26262B] sm:grid-cols-3">
+                <div className="mb-4 grid border-b border-border sm:grid-cols-3">
                   {[
                     ["01", "Understand the brief"],
                     ["02", "Find supplier matches"],
@@ -1026,20 +1002,20 @@ export default function Home() {
                   ].map(([number, label], index) => (
                     <div
                       key={number}
-                      className={`flex items-center gap-3 border-[#26262B] px-3 py-3 font-ledger-mono text-[10px] uppercase tracking-[0.02em] sm:px-4 ${
+                      className={`flex items-center gap-3 border-border px-3 py-3 font-ledger-mono text-[10px] uppercase tracking-[0.02em] sm:px-4 ${
                         index < 2 ? "border-b sm:border-b-0 sm:border-r" : ""
                       }`}
                     >
                       <span
                         className={`flex h-6 w-7 items-center justify-center rounded-md ${
                           index === 0
-                            ? "bg-[#7C8FE0] text-[#0A0A0C]"
-                            : "border border-[#38383F] text-[#686660]"
+                            ? "bg-accent text-accent-contrast"
+                            : "border border-border-strong text-text-tertiary"
                         }`}
                       >
                         {number}
                       </span>
-                      <span className={index === 0 ? "text-[#F2F1EC]" : "text-[#686660]"}>
+                      <span className={index === 0 ? "text-text-primary" : "text-text-tertiary"}>
                         {label}
                       </span>
                     </div>
@@ -1047,7 +1023,7 @@ export default function Home() {
                 </div>
 
                 <label className="block px-2 sm:px-4">
-                  <span className="font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#9C9A93]">
+                  <span className="font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-text-secondary">
                     Procurement requirement
                   </span>
                 <textarea
@@ -1057,38 +1033,38 @@ export default function Home() {
                     setShowResults(false);
                   }}
                   placeholder="Example: I need 500 recyclable custom 5-ply boxes for cosmetics shipping, delivered to Hyderabad within 3 weeks, under ₹12 per box..."
-                  className="min-h-32 w-full resize-none border-none bg-transparent py-3 font-ledger-sans text-lg leading-7 text-[#F2F1EC] outline-none placeholder:text-[#686660]"
+                  className="min-h-32 w-full resize-none rounded-md border border-transparent bg-transparent py-3 text-lg leading-7 text-text-primary outline-none transition placeholder:text-text-tertiary focus:border-accent"
                 />
                 </label>
 
-                <div className="flex flex-col items-start justify-between gap-3 border-t border-[#26262B] px-3 pt-3 sm:flex-row sm:items-center sm:px-4">
+                <div className="flex flex-col items-start justify-between gap-3 border-t border-border px-3 pt-3 sm:flex-row sm:items-center sm:px-4">
 
-                  <div className="font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#686660]">
+                  <div className="font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-text-tertiary">
                     {query.length > 0
                       ? `${query.length} characters`
                       : "Describe your procurement requirement"}
                   </div>
 
-                  <button
+                  <Button
+                    variant="primary"
                     onClick={handleAnalyze}
                     disabled={loading}
-                    className="rounded-md bg-[#7C8FE0] px-5 py-3 font-ledger-mono text-[11px] font-semibold uppercase tracking-[0.02em] text-[#0A0A0C] transition hover:bg-[#9AA8EE] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {loading
                       ? "Building shortlist…"
                       : "Find supplier matches →"}
-                  </button>
+                  </Button>
 
                 </div>
               </div>
 
               {loading && (
-                <div className="mt-3 rounded-lg border border-[#38383F] bg-[#1B1B1F] px-5 py-4 text-white">
+                <div className="mt-3 rounded-lg border border-border-strong bg-surface-raised px-5 py-4 text-text-primary">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="text-sm font-semibold">
                       Preparing your supplier shortlist
                     </p>
-                    <span className="text-xs text-zinc-400">
+                    <span className="text-xs text-text-secondary">
                       {ANALYSIS_STAGES.find((stage) => stage.key === analysisStage)?.label}
                     </span>
                   </div>
@@ -1105,15 +1081,15 @@ export default function Home() {
                           <span
                             className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
                               complete
-                                ? "border-emerald-500 bg-emerald-500 text-zinc-950"
+                                ? "border-success bg-success text-accent-contrast"
                                 : active
-                                  ? "border-amber-500 text-amber-400"
-                                  : "border-zinc-700 text-zinc-500"
+                                  ? "border-warning text-warning"
+                                  : "border-border-strong text-text-secondary"
                             }`}
                           >
                             {complete ? "✓" : index + 1}
                           </span>
-                          <span className={active ? "text-white" : "text-zinc-500"}>
+                          <span className={active ? "text-text-primary" : "text-text-secondary"}>
                             {stage.label}
                           </span>
                         </div>
@@ -1124,22 +1100,22 @@ export default function Home() {
               )}
 
               {searchError && (
-                <div className="mt-6 rounded-md border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+                <Notice tone="danger" className="mt-6">
                   Supplier search failed: {searchError}
-                </div>
+                </Notice>
               )}
 
             </div>
           </section>
 
-          <div className="-mt-24 bg-[#0A0A0C] px-6 pb-12 sm:px-8">
+          <div className="-mt-24 bg-bg px-6 pb-12 sm:px-8">
             <div className="mx-auto max-w-5xl pt-28">
               <div className="mx-auto max-w-4xl">
 
               {/* SUGGESTIONS */}
               <div className="flex flex-wrap justify-center gap-3">
 
-                <span className="mr-1 py-2 font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-[#686660]">
+                <span className="mr-1 py-2 font-ledger-mono text-[10px] uppercase tracking-[0.02em] text-text-tertiary">
                   Try searching:
                 </span>
 
@@ -1147,7 +1123,7 @@ export default function Home() {
                   <button
                     key={suggestion.label}
                     onClick={() => setQuery(suggestion.query)}
-                    className="rounded-full border border-[#38383F] px-4 py-2 text-sm text-[#9C9A93] transition hover:border-[#7C8FE0] hover:text-[#F2F1EC]"
+                    className="rounded-md border border-border-strong px-4 py-2 text-sm text-text-secondary transition hover:border-accent hover:text-text-primary"
                   >
                     {suggestion.label}
                   </button>
@@ -1160,47 +1136,37 @@ export default function Home() {
               {showResults && (
                 <div
                   id="suppliers"
-                  className="mt-12 bg-zinc-50 px-6 pb-24 pt-8 sm:px-8"
+                  className="mt-12 bg-bg px-6 pb-24 pt-8 sm:px-8"
                 >
 
                   {/* REQUIREMENT */}
-                  <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <PageHeader
+                    eyebrow="Procurement intelligence"
+                    title="We understood your requirement"
+                    actions={
+                      <Button variant="secondary" onClick={saveCurrentRequest}>
+                        Save request
+                      </Button>
+                    }
+                  />
 
-                    <div>
-                      <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                        Procurement intelligence
-                      </div>
-
-                      <h2 className="mt-2 font-display text-2xl font-semibold">
-                        We understood your requirement
-                      </h2>
-                    </div>
-
-                    <button
-                      onClick={saveCurrentRequest}
-                      className={pillOutline}
-                    >
-                      Save request
-                    </button>
-
-                  </div>
+                  <div className="mb-8" />
 
                   {saveNotice && (
-                    <div className="mb-5 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                    <Notice tone="success" className="mb-5">
                       {saveNotice}
-                    </div>
+                    </Notice>
                   )}
 
                   {/* Concise, human-readable procurement brief — the
                       complete intent in one line, not just the product
                       category. Never fabricates a clause for a field
                       that wasn't actually stated. */}
-                  <p className="mb-6 max-w-3xl text-lg leading-8 text-zinc-700">
+                  <p className="mb-6 max-w-3xl text-lg leading-8 text-text-secondary">
                     {buildProcurementBrief(requirements)}
                   </p>
 
-                  <div className="mb-6 rounded-md border border-zinc-200 bg-white p-5">
+                  <Card padding="sm" className="mb-6">
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       <Requirement
                         label="Product"
@@ -1228,7 +1194,7 @@ export default function Home() {
                         }
                       />
                     </div>
-                  </div>
+                  </Card>
 
                   {/* EXTRA REQUIREMENTS — Deadline and Specifications now
                       are already represented in the structured summary
@@ -1237,9 +1203,9 @@ export default function Home() {
                       phrases) that doesn't fit a dedicated row. */}
                   {requirements.additionalRequirements.length > 0 && (
 
-                    <div className="mb-10 rounded-md border border-zinc-200 bg-white p-6">
+                    <Card padding="md" className="mb-10">
 
-                      <h3 className="font-display font-semibold">
+                      <h3 className="font-ledger-serif font-medium text-text-primary">
                         Additional requirements
                       </h3>
 
@@ -1247,63 +1213,53 @@ export default function Home() {
 
                         {requirements.additionalRequirements.map(
                           (requirement, index) => (
-                            <span
-                              key={index}
-                              className={chip}
-                            >
+                            <Badge key={index} tone="neutral">
                               {requirement}
-                            </span>
+                            </Badge>
                           )
                         )}
 
                       </div>
 
-                    </div>
+                    </Card>
                   )}
 
                   {/* SUPPLIER HEADER */}
-                  <div className="mb-6 flex items-end justify-between">
-
-                    <div>
-                      <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                        Supplier intelligence
+                  <PageHeader
+                    eyebrow="Supplier intelligence"
+                    title="Best matches for your requirement"
+                    actions={
+                      <div className="text-right">
+                        <span className="text-sm text-text-secondary">
+                          {matchedSuppliers.length} suppliers analyzed
+                        </span>
+                        {matchMeta?.searchRegion && (
+                          <p className="text-xs text-text-tertiary">
+                            Searching {matchMeta.searchRegion}-wide
+                            {requirements.location
+                              ? ` · prioritizing ${requirements.location}`
+                              : ""}
+                          </p>
+                        )}
                       </div>
+                    }
+                  />
 
-                      <h2 className="mt-2 font-display text-2xl font-semibold">
-                        Best matches for your requirement
-                      </h2>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="text-sm text-zinc-500">
-                        {matchedSuppliers.length} suppliers analyzed
-                      </span>
-                      {matchMeta?.searchRegion && (
-                        <p className="text-xs text-zinc-400">
-                          Searching {matchMeta.searchRegion}-wide
-                          {requirements.location
-                            ? ` · prioritizing ${requirements.location}`
-                            : ""}
-                        </p>
-                      )}
-                    </div>
-
-                  </div>
+                  <div className="mb-6" />
 
                   {retrievalMeta && (
                     <div
                       className={`mb-6 flex flex-wrap items-center justify-between gap-3 rounded-md border px-4 py-3 ${
                         retrievalMeta.method === "moss"
-                          ? "border-zinc-200 bg-zinc-50"
-                          : "border-amber-200 bg-amber-50"
+                          ? "border-border bg-surface"
+                          : "border-warning/30 bg-warning-soft"
                       }`}
                     >
                       <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                        <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
                           Retrieval source
                         </p>
-                        <p className="mt-1 text-sm font-semibold text-zinc-900">
+                        <p className="mt-1 text-sm font-semibold text-text-primary">
                           {retrievalMeta.method === "moss"
                             ? "Moss retrieval"
                             : `Catalog scan fallback${
@@ -1313,7 +1269,7 @@ export default function Home() {
                               }`}
                         </p>
                       </div>
-                      <span className="text-xs font-medium text-zinc-600">
+                      <span className="text-xs font-medium text-text-secondary">
                         {retrievalMeta.method === "moss"
                           ? `${retrievalMeta.mossCandidates} candidates recalled · ${retrievalMeta.hydrated} suppliers matched`
                           : `${retrievalMeta.hydrated} suppliers scanned`}
@@ -1322,9 +1278,9 @@ export default function Home() {
                   )}
 
                   {matchMeta && (
-                    <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 px-5 py-4 text-zinc-900">
+                    <div className="mb-6 rounded-md border border-warning/30 bg-warning-soft px-5 py-4 text-text-primary">
                       {matchMeta.strong === 0 && (
-                        <p className="font-display text-lg font-semibold">
+                        <p className="font-ledger-serif text-lg font-medium">
                           No suppliers fully match your requirements yet.
                         </p>
                       )}
@@ -1334,19 +1290,19 @@ export default function Home() {
                           {matchMeta.strong} strong match
                           {matchMeta.strong === 1 ? "" : "es"}
                         </span>
-                        <span className="font-semibold text-amber-800">
+                        <span className="font-semibold text-warning">
                           {matchMeta.potential} potential match
                           {matchMeta.potential === 1 ? "" : "es"}
                         </span>
                         {matchMeta.weak > 0 && (
-                          <span className="text-zinc-600">
+                          <span className="text-text-secondary">
                             {matchMeta.weak} weak match
                             {matchMeta.weak === 1 ? "" : "es"}
                           </span>
                         )}
                       </div>
 
-                      <p className="mt-2 max-w-3xl text-sm leading-6 text-amber-900/80">
+                      <p className="mt-2 max-w-3xl text-sm leading-6 text-warning/80">
                         Potential matches have partial evidence for your
                         requirements and should be verified directly with the
                         supplier before you send an RFQ.
@@ -1356,11 +1312,11 @@ export default function Home() {
 
                   {/* COMPARISON BAR */}
                   {compareIds.length > 0 && (
-                    <div className="sticky top-4 z-20 mb-6 flex items-center justify-between rounded-md bg-zinc-950 px-5 py-4">
+                    <div className="sticky top-4 z-20 mb-6 flex items-center justify-between rounded-md border border-border-strong bg-surface-raised px-5 py-4">
 
                       <div>
-                        <p className="text-sm font-semibold text-white">
-                          <span className="text-amber-500">
+                        <p className="text-sm font-semibold text-text-primary">
+                          <span className="text-accent">
                             {compareIds.length}
                           </span>{" "}
                           supplier
@@ -1370,17 +1326,18 @@ export default function Home() {
                           selected
                         </p>
 
-                        <p className="text-xs text-zinc-400">
+                        <p className="text-xs text-text-secondary">
                           Compare side-by-side, or send them an RFQ
                         </p>
                       </div>
 
                       <div className="flex gap-3">
 
-                        <button
+                        <Button
+                          variant="secondary"
                           onClick={() => {
                             if (compareIds.length < 2) {
-                              alert(
+                              setSelectionNotice(
                                 "Select at least 2 suppliers to compare."
                               );
                               return;
@@ -1388,18 +1345,17 @@ export default function Home() {
 
                             setSelectedVendorId(-1);
                           }}
-                          className="rounded-full border border-zinc-700 px-5 py-2.5 text-sm font-medium text-white transition hover:border-white"
                         >
                           Compare suppliers
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
+                          variant="primary"
                           onClick={handleSendRFQ}
                           disabled={sendingRFQ}
-                          className={pillPrimary}
                         >
                           {sendingRFQ ? "Sending…" : "Send RFQ"}
-                        </button>
+                        </Button>
 
                       </div>
 
@@ -1407,9 +1363,9 @@ export default function Home() {
                   )}
 
                   {selectionNotice && (
-                    <div className="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                    <Notice tone="danger" className="mb-5">
                       {selectionNotice}
-                    </div>
+                    </Notice>
                   )}
 
                   {/* SUPPLIER CARDS — suppliers with no relevant evidence
@@ -1438,18 +1394,19 @@ export default function Home() {
 
                           {showWeakDivider && (
                             <div className="mb-5 mt-2 flex items-center gap-3">
-                              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                              <span className="font-ledger-mono text-xs font-semibold uppercase tracking-wider text-text-tertiary">
                                 Potential matches — verify capability directly
                               </span>
-                              <span className="h-px flex-1 bg-zinc-200" />
+                              <span className="h-px flex-1 bg-border" />
                             </div>
                           )}
 
-                          <div
-                            className={`rounded-md border bg-white p-6 transition ${
+                          <Card
+                            padding="md"
+                            className={`transition ${
                               isCompared
-                                ? "border-zinc-950"
-                                : "border-zinc-200 hover:border-zinc-400"
+                                ? "border-border-strong"
+                                : "hover:border-border-strong"
                             }`}
                           >
 
@@ -1458,7 +1415,7 @@ export default function Home() {
 
                               <div className="flex gap-4">
 
-                                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50 font-display font-semibold text-zinc-950">
+                                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border bg-surface-raised font-ledger-mono font-semibold text-text-primary">
                                   #{index + 1}
                                 </div>
 
@@ -1466,31 +1423,28 @@ export default function Home() {
 
                                   <div className="flex flex-wrap items-center gap-3">
 
-                                    <h3 className="font-display text-lg font-semibold">
+                                    <h3 className="font-ledger-serif text-lg font-medium text-text-primary">
                                       {vendor.identity.companyName}
                                     </h3>
 
                                     {vendor.sourcing.verification.status ===
                                       "verified" ? (
-                                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                      <Badge tone="success" dot>
                                         Verified / evidence-backed
-                                      </span>
+                                      </Badge>
                                     ) : vendor.intelligence.sources.length > 0 ? (
-                                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                                      <Badge tone="warning" dot>
                                         Public evidence found · Not independently verified
-                                      </span>
+                                      </Badge>
                                     ) : (
-                                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+                                      <Badge tone="neutral" dot>
                                         No public evidence available
-                                      </span>
+                                      </Badge>
                                     )}
 
                                   </div>
 
-                                  <p className="mt-1 text-sm text-zinc-500">
+                                  <p className="mt-1 text-sm text-text-secondary">
                                     {vendor.capabilities.categories.join(", ") ||
                                       "Uncategorized"}{" "}
                                     · {vendor.identity.location}
@@ -1502,32 +1456,30 @@ export default function Home() {
 
                               <div className="text-right">
 
-                                <div className="font-display text-3xl font-bold text-zinc-950">
+                                <div className="tabular font-ledger-mono text-3xl font-bold text-text-primary">
                                   {vendor.score}%
                                 </div>
 
                                 <div className="mt-1 flex items-center justify-end gap-1.5">
-                                  <span className="h-1 w-4 bg-amber-500" />
-                                  <p className="text-[11px] uppercase tracking-wider text-zinc-400">
+                                  <span className="h-1 w-4 bg-accent" />
+                                  <p className="text-[11px] uppercase tracking-wider text-text-tertiary">
                                     match score
                                   </p>
                                 </div>
 
-                                <p
-                                  className={`mt-1 text-[11px] font-semibold uppercase tracking-wider ${
-                                    TIER_BADGE_CLASS[vendor.tier] ?? "text-zinc-400"
-                                  }`}
-                                >
-                                  {TIER_LABEL[vendor.tier] ?? vendor.tier}
-                                </p>
+                                <div className="mt-1.5 flex justify-end">
+                                  <Badge tone={TIER_BADGE_TONE[vendor.tier] ?? "neutral"}>
+                                    {TIER_LABEL[vendor.tier] ?? vendor.tier}
+                                  </Badge>
+                                </div>
 
-                                <p className="mt-1 text-[11px] text-zinc-400">
+                                <p className="mt-1.5 text-[11px] text-text-tertiary">
                                   {CONFIDENCE_LABEL[
                                     vendor.intelligence.dataConfidence
                                   ]}
                                 </p>
 
-                                <p className="mt-2 max-w-[220px] text-[10px] leading-4 text-zinc-400">
+                                <p className="mt-2 max-w-[220px] text-[10px] leading-4 text-text-tertiary">
                                   Based on product, specifications, use case,
                                   location, and requirement completeness.
                                 </p>
@@ -1537,47 +1489,41 @@ export default function Home() {
                             </div>
 
                             {/* DESCRIPTION */}
-                            <p className="mt-5 text-sm leading-6 text-zinc-600">
+                            <p className="mt-5 text-sm leading-6 text-text-secondary">
                               {vendor.capabilities.productDescription ||
                                 "No public description available."}
                             </p>
 
                             {/* WHY IT MATCHED */}
                             {vendor.reasons.length > 0 && (
-                              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                              <div className="mt-4 grid gap-2 sm:grid-cols-2">
                                 {vendor.reasons.slice(0, 4).map((reason, reasonIndex) => (
-                                  <li
+                                  <Badge
                                     key={reasonIndex}
-                                    className={`flex items-center gap-1.5 text-xs font-medium ${
-                                      reason.type === "positive"
-                                        ? "text-emerald-700"
-                                        : "text-amber-700"
-                                    }`}
+                                    tone={reason.type === "positive" ? "success" : "warning"}
+                                    className="justify-self-start normal-case tracking-normal"
                                   >
-                                    <span>
-                                      {reason.type === "positive" ? "✓" : "⚠"}
-                                    </span>
-                                    {reason.label}
-                                  </li>
+                                    {reason.type === "positive" ? "✓" : "⚠"} {reason.label}
+                                  </Badge>
                                 ))}
-                              </ul>
+                              </div>
                             )}
 
                             {requirements.location &&
                               vendor.explanation.locationMatch !== "match" && (
-                                <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
-                                  <p className="text-xs font-semibold uppercase tracking-wider text-amber-900">
+                                <Notice tone="warning" className="mt-4">
+                                  <p className="font-ledger-mono text-xs font-semibold uppercase tracking-wider">
                                     Destination: {requirements.location}
                                   </p>
-                                  <p className="mt-1 text-sm font-medium text-amber-900">
+                                  <p className="mt-1 text-sm font-medium">
                                     ⚠ {requirements.location} delivery
                                     capability not confirmed
                                   </p>
-                                </div>
+                                </Notice>
                               )}
 
                             {/* DATA */}
-                            <div className="mt-5 grid gap-4 border-t border-zinc-100 pt-5 sm:grid-cols-4">
+                            <div className="mt-5 grid gap-4 border-t border-border pt-5 sm:grid-cols-4">
 
                               <SupplierDetail
                                 label="Pricing"
@@ -1606,44 +1552,41 @@ export default function Home() {
                             </div>
 
                             {/* ACTIONS */}
-                            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-5">
+                            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
 
-                              <button
+                              <Button
+                                variant="secondary"
                                 onClick={() =>
                                   toggleCompare(
                                     vendor.id
                                   )
                                 }
-                                className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                                  isCompared
-                                    ? "border-zinc-950 bg-zinc-950 text-white"
-                                    : "border-zinc-200 text-zinc-600 hover:border-zinc-950 hover:text-zinc-950"
-                                }`}
+                                className={isCompared ? "border-accent text-accent" : ""}
                               >
                                 {isCompared
                                   ? "✓ Selected"
                                   : "Compare"}
-                              </button>
+                              </Button>
 
                               <div className="flex gap-3">
 
-                                <button
+                                <Button
+                                  variant="secondary"
                                   onClick={() =>
                                     setSelectedVendorId(
                                       vendor.id
                                     )
                                   }
-                                  className={pillOutline}
                                 >
                                   View supplier
-                                </button>
+                                </Button>
 
                                 {vendor.identity.website && (
                                   <a
                                     href={vendor.identity.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={pillDark}
+                                    className={buttonClasses("secondary")}
                                   >
                                     Website ↗
                                   </a>
@@ -1653,7 +1596,7 @@ export default function Home() {
 
                             </div>
 
-                          </div>
+                          </Card>
 
                           </div>
                         );
@@ -1673,41 +1616,36 @@ export default function Home() {
       {/* SUPPLIER DETAIL MODAL */}
       {selectedVendor &&
         selectedVendorId !== -1 && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/60 p-6">
+          <Modal onClose={() => setSelectedVendorId(null)} maxWidth="max-w-3xl">
 
-            <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-md border border-zinc-200 bg-white">
-
-              <div className="flex items-start justify-between border-b border-zinc-100 p-7">
+              <div className="flex items-start justify-between border-b border-border p-7">
 
                 <div>
 
                   <div className="flex flex-wrap items-center gap-3">
 
-                    <h2 className="font-display text-2xl font-semibold">
+                    <h2 className="font-ledger-serif text-2xl font-medium text-text-primary">
                       {selectedVendor.identity.companyName}
                     </h2>
 
                     {selectedVendor.sourcing.verification.status ===
                       "verified" ? (
-                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      <Badge tone="success" dot>
                         Verified / evidence-backed
-                      </span>
+                      </Badge>
                     ) : selectedVendor.intelligence.sources.length > 0 ? (
-                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                      <Badge tone="warning" dot>
                         Public evidence found · Not independently verified
-                      </span>
+                      </Badge>
                     ) : (
-                      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-                        <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+                      <Badge tone="neutral" dot>
                         No public evidence available
-                      </span>
+                      </Badge>
                     )}
 
                   </div>
 
-                  <p className="mt-2 text-sm text-zinc-500">
+                  <p className="mt-2 text-sm text-text-secondary">
                     {selectedVendor.capabilities.categories.join(", ") ||
                       "Uncategorized"}{" "}
                     · {selectedVendor.identity.location}
@@ -1715,90 +1653,79 @@ export default function Home() {
 
                 </div>
 
-                <button
-                  onClick={() =>
-                    setSelectedVendorId(null)
-                  }
-                  className="rounded-md px-3 py-2 text-xl text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700"
-                >
-                  ×
-                </button>
+                <ModalCloseButton onClose={() => setSelectedVendorId(null)} />
 
               </div>
 
               <div className="grid gap-4 p-7 sm:grid-cols-2">
 
-                <div className="rounded-md border border-zinc-200 bg-zinc-50 p-6">
+                <Card tone="sunken" padding="md">
 
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                  <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
                     ProcureAI match
                   </p>
 
-                  <div className="mt-2 font-display text-5xl font-bold text-zinc-950">
+                  <div className="tabular mt-2 font-ledger-mono text-5xl font-bold text-text-primary">
                     {selectedVendor.score}%
                   </div>
 
                   <div className="mt-2 flex items-center gap-1.5">
-                    <span className="h-1 w-5 bg-amber-500" />
-                    <p className="text-xs text-zinc-500">
+                    <span className="h-1 w-5 bg-accent" />
+                    <p className="text-xs text-text-secondary">
                       Based on your procurement requirements
                     </p>
                   </div>
 
-                </div>
+                </Card>
 
-                <div className="rounded-md border border-zinc-200 p-6">
+                <Card padding="md">
 
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                  <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
                     Supplier category
                   </p>
 
-                  <p className="mt-2 font-display text-xl font-semibold">
+                  <p className="mt-2 font-ledger-serif text-xl font-medium text-text-primary">
                     {selectedVendor.capabilities.categories.join(", ") ||
                       "Uncategorized"}
                   </p>
 
-                  <p className="mt-1 text-sm text-zinc-500">
+                  <p className="mt-1 text-sm text-text-secondary">
                     {selectedVendor.identity.location}
                   </p>
 
-                </div>
+                </Card>
 
               </div>
 
               {selectedVendor.reasons.length > 0 && (
                 <div className="px-7 pb-2">
 
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                  <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
                     Why this matched
                   </p>
 
-                  <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1.5">
+                  <div className="mt-2 flex flex-wrap gap-2">
                     {selectedVendor.reasons.map((reason, reasonIndex) => (
-                      <li
+                      <Badge
                         key={reasonIndex}
-                        className={`flex items-center gap-1.5 text-xs font-medium ${
-                          reason.type === "positive"
-                            ? "text-emerald-700"
-                            : "text-amber-700"
-                        }`}
+                        tone={reason.type === "positive" ? "success" : "warning"}
+                        className="normal-case tracking-normal"
                       >
-                        <span>{reason.type === "positive" ? "✓" : "⚠"}</span>
-                        {reason.label}
-                      </li>
+                        {reason.type === "positive" ? "✓" : "⚠"} {reason.label}
+                      </Badge>
                     ))}
-                  </ul>
+                  </div>
 
                 </div>
               )}
 
               <div className="px-7">
 
-                <h3 className="font-display font-semibold">
+                <h3 className="font-ledger-serif font-medium text-text-primary">
                   About this supplier
                 </h3>
 
-                <p className="mt-3 text-sm leading-7 text-zinc-600">
+                <p className="mt-3 text-sm leading-7 text-text-secondary">
                   {selectedVendor.capabilities.productDescription ||
                     "No public description available."}
                 </p>
@@ -1838,14 +1765,14 @@ export default function Home() {
               </div>
 
               {/* EVIDENCE */}
-              <div className="border-t border-zinc-100 px-7 py-6">
+              <div className="border-t border-border px-7 py-6">
 
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="font-display font-semibold">
+                  <h3 className="font-ledger-serif font-medium text-text-primary">
                     Evidence
                   </h3>
 
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                  <span className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
                     {
                       CONFIDENCE_LABEL[
                         selectedVendor.intelligence.dataConfidence
@@ -1859,7 +1786,7 @@ export default function Home() {
 
                   if (evidenceItems.length === 0) {
                     return (
-                      <p className="mt-3 text-sm text-zinc-500">
+                      <p className="mt-3 text-sm text-text-secondary">
                         No public evidence available for this supplier.
                       </p>
                     );
@@ -1867,24 +1794,24 @@ export default function Home() {
 
                   return (
                     <>
-                      <p className="mt-2 text-xs leading-5 text-zinc-500">
+                      <p className="mt-2 text-xs leading-5 text-text-secondary">
                         Only the facts listed below are backed by a public
                         source ProcureAI has on file. Anything else shown
                         for this supplier is not independently sourced.
                       </p>
 
-                      <ul className="mt-4 divide-y divide-zinc-100 rounded-md border border-zinc-200">
+                      <ul className="mt-4 divide-y divide-border rounded-md border border-border">
                         {evidenceItems.map((item, index) => (
                           <li
                             key={index}
                             className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
                           >
                             <div className="min-w-0">
-                              <p className="text-sm font-medium text-zinc-800">
+                              <p className="text-sm font-medium text-text-primary">
                                 {item.fieldLabel}
                               </p>
 
-                              <p className="mt-0.5 text-xs text-zinc-500">
+                              <p className="mt-0.5 text-xs text-text-secondary">
                                 {item.sourceName} · Retrieved{" "}
                                 {formatEvidenceDate(item.retrievedAt)}
                               </p>
@@ -1894,7 +1821,7 @@ export default function Home() {
                               href={item.sourceUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="shrink-0 text-xs font-semibold text-amber-600 transition hover:text-amber-700"
+                              className="shrink-0 text-xs font-semibold text-accent transition hover:text-accent-hover"
                             >
                               Evidence ↗
                             </a>
@@ -1911,19 +1838,19 @@ export default function Home() {
                   history, deliberately kept visually and structurally
                   separate from the sourced Evidence section above so it's
                   never mistaken for an externally verified fact. */}
-              <div className="border-t border-zinc-100 px-7 py-6">
+              <div className="border-t border-border px-7 py-6">
 
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="font-display font-semibold">
+                  <h3 className="font-ledger-serif font-medium text-text-primary">
                     Performance
                   </h3>
 
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                  <span className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
                     ProcureAI-derived
                   </span>
                 </div>
 
-                <p className="mt-2 text-xs leading-5 text-zinc-500">
+                <p className="mt-2 text-xs leading-5 text-text-secondary">
                   Calculated from this supplier&apos;s actual RFQ, quote,
                   and award activity on ProcureAI. This is not an
                   externally verified fact, and it is not a judgment of
@@ -1931,11 +1858,11 @@ export default function Home() {
                 </p>
 
                 {performanceLoading ? (
-                  <p className="mt-3 text-sm text-zinc-500">
+                  <p className="mt-3 text-sm text-text-secondary">
                     Calculating…
                   </p>
                 ) : performance ? (
-                  <ul className="mt-4 grid gap-2 text-sm text-zinc-700 sm:grid-cols-2">
+                  <ul className="mt-4 grid gap-2 text-sm text-text-secondary sm:grid-cols-2">
                     <li>RFQs received: {performance.rfqsReceived}</li>
                     <li>Quotes submitted: {performance.quotesSubmitted}</li>
                     <li>Orders awarded: {performance.ordersAwarded}</li>
@@ -1965,16 +1892,16 @@ export default function Home() {
                     </li>
                   </ul>
                 ) : (
-                  <p className="mt-3 text-sm text-zinc-500">
+                  <p className="mt-3 text-sm text-text-secondary">
                     Performance data unavailable.
                   </p>
                 )}
 
               </div>
 
-              <div className="mx-7 rounded-md bg-zinc-50 p-4">
+              <div className="mx-7 rounded-md bg-surface-raised p-4">
 
-                <p className="text-xs leading-5 text-zinc-500">
+                <p className="text-xs leading-5 text-text-secondary">
                   Supplier information is based on publicly
                   available sources. ProcureAI has not independently
                   verified this supplier&apos;s claims, pricing,
@@ -1986,27 +1913,27 @@ export default function Home() {
 
               <div className="flex flex-wrap justify-end gap-3 p-7">
 
-                <button
+                <Button
+                  variant="secondary"
                   onClick={() =>
                     toggleCompare(
                       selectedVendor.id
                     )
                   }
-                  className={pillOutline}
                 >
                   {compareIds.includes(
                     selectedVendor.id
                   )
                     ? "✓ In comparison"
                     : "Add to comparison"}
-                </button>
+                </Button>
 
                 {selectedVendor.identity.website && (
                   <a
                     href={selectedVendor.identity.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={pillDark}
+                    className={buttonClasses("secondary")}
                   >
                     Visit supplier website ↗
                   </a>
@@ -2014,71 +1941,58 @@ export default function Home() {
 
               </div>
 
-            </div>
-          </div>
+          </Modal>
         )}
 
       {/* COMPARISON MODAL */}
       {selectedVendorId === -1 &&
         comparisonVendors.length >= 2 && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/60 p-6">
+          <Modal onClose={() => setSelectedVendorId(null)} maxWidth="max-w-6xl">
 
-            <div className="max-h-[90vh] w-full max-w-6xl overflow-auto rounded-md border border-zinc-200 bg-white">
-
-              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-100 bg-white p-7">
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-surface p-7">
 
                 <div>
 
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                  <div className="eyebrow text-accent">
+                    <span className="eyebrow-dot bg-accent" />
                     Procurement comparison
                   </div>
 
-                  <h2 className="mt-1 font-display text-2xl font-semibold">
+                  <h2 className="mt-1 font-ledger-serif text-2xl font-medium text-text-primary">
                     Compare suppliers
                   </h2>
 
                 </div>
 
-                <button
-                  onClick={() =>
-                    setSelectedVendorId(null)
-                  }
-                  className="rounded-md px-3 py-2 text-xl text-zinc-400 transition hover:bg-zinc-100"
-                >
-                  ×
-                </button>
+                <ModalCloseButton onClose={() => setSelectedVendorId(null)} />
 
               </div>
 
-              <div className="overflow-x-auto p-7">
+              <div className="p-7">
 
-                <table className="w-full min-w-[800px] border-collapse text-left">
+                <Table>
 
                   <thead>
 
                     <tr>
 
-                      <th className="w-48 border-b border-zinc-200 p-4 text-sm font-medium text-zinc-400">
+                      <Th className="w-48">
                         Attribute
-                      </th>
+                      </Th>
 
                       {comparisonVendors.map(
                         (vendor) => (
-                          <th
-                            key={vendor.id}
-                            className="border-b border-zinc-200 p-4"
-                          >
+                          <Th key={vendor.id}>
 
-                            <div className="font-display text-lg font-semibold">
+                            <div className="font-ledger-serif text-sm normal-case tracking-normal text-text-primary">
                               {vendor.identity.companyName}
                             </div>
 
-                            <div className="mt-1 text-sm font-normal text-zinc-500">
+                            <div className="mt-1 font-ledger-sans text-sm font-normal normal-case tracking-normal text-text-secondary">
                               {vendor.identity.location}
                             </div>
 
-                          </th>
+                          </Th>
                         )
                       )}
 
@@ -2155,20 +2069,20 @@ export default function Home() {
 
                   </tbody>
 
-                </table>
+                </Table>
 
               </div>
 
-              <div className="flex justify-end gap-3 border-t border-zinc-100 p-7">
+              <div className="flex justify-end gap-3 border-t border-border p-7">
 
-                <button
+                <Button
+                  variant="secondary"
                   onClick={() =>
                     setSelectedVendorId(null)
                   }
-                  className={pillOutline}
                 >
                   Close
-                </button>
+                </Button>
 
                 {comparisonVendors
                   .filter((vendor) => vendor.identity.website)
@@ -2178,7 +2092,7 @@ export default function Home() {
                       href={vendor.identity.website ?? undefined}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={pillDark}
+                      className={buttonClasses("secondary")}
                     >
                       {vendor.identity.companyName} ↗
                     </a>
@@ -2186,8 +2100,7 @@ export default function Home() {
 
               </div>
 
-            </div>
-          </div>
+          </Modal>
         )}
 
     </main>
@@ -2202,13 +2115,13 @@ function Requirement({
   value: string;
 }) {
   return (
-    <div className="rounded-md border border-zinc-200 bg-white p-5">
+    <div className="rounded-md border border-border bg-surface p-5">
 
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+      <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
         {label}
       </p>
 
-      <p className="mt-2 font-display text-lg font-semibold">
+      <p className="mt-2 font-ledger-serif text-lg font-medium text-text-primary">
         {value}
       </p>
 
@@ -2226,11 +2139,11 @@ function SupplierDetail({
   return (
     <div>
 
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+      <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
         {label}
       </p>
 
-      <p className="mt-1 text-sm font-medium text-zinc-800">
+      <p className="mt-1 text-sm font-medium text-text-primary">
         {value}
       </p>
 
@@ -2246,13 +2159,13 @@ function InfoBox({
   value: string;
 }) {
   return (
-    <div className="rounded-md border border-zinc-200 p-5">
+    <div className="rounded-md border border-border p-5">
 
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+      <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
         {label}
       </p>
 
-      <p className="mt-2 text-base font-semibold">
+      <p className="mt-2 text-base font-semibold text-text-primary">
         {value}
       </p>
 
@@ -2272,21 +2185,21 @@ function ComparisonRow({
   return (
     <tr>
 
-      <td className="border-b border-zinc-100 p-4 text-sm font-medium text-zinc-500">
+      <Td className="font-medium text-text-secondary">
         {label}
-      </td>
+      </Td>
 
       {values.map((value, index) => (
-        <td
+        <Td
           key={index}
-          className={`border-b border-zinc-100 p-4 text-sm font-medium ${
+          className={
             highlight
-              ? "font-display text-lg font-bold text-zinc-950"
-              : "text-zinc-800"
-          }`}
+              ? "tabular font-ledger-mono text-lg font-bold text-text-primary"
+              : "font-medium text-text-primary"
+          }
         >
           {value}
-        </td>
+        </Td>
       ))}
 
     </tr>

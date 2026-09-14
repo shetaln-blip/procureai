@@ -1,9 +1,11 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useState } from "react";
 import type { Quote } from "@/lib/rfq-types";
 import type { SupplierFacingRequirement } from "@/lib/extraction/supplier-view";
+import { Badge, Button, Card, Notice, PageHeader } from "@/components/ui";
+import { Field, Select, TextInput } from "@/components/ui/Input";
 
 const PAYMENT_TERMS_OPTIONS = [
   "On delivery",
@@ -13,9 +15,6 @@ const PAYMENT_TERMS_OPTIONS = [
   "50% advance",
   "100% advance",
 ];
-
-const inputClass =
-  "w-full rounded-md border border-zinc-200 px-3 py-2.5 text-sm outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500";
 
 type RespondData = {
   rfqId: string;
@@ -36,15 +35,20 @@ type RespondData = {
 
 export default function RespondPageWrapper() {
   return (
-    <Suspense
-      fallback={
-        <main className="flex min-h-screen items-center justify-center bg-zinc-50 text-zinc-400">
-          Loading…
-        </main>
-      }
-    >
+    <Suspense fallback={<LoadingScreen />}>
       <RespondPage />
     </Suspense>
+  );
+}
+
+/** Full-screen loading state — shared by the Suspense fallback above and
+ *  the in-flight fetch below, which were previously two verbatim copies
+ *  of the same markup. */
+function LoadingScreen() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-bg font-ledger-mono text-sm text-text-secondary">
+      Loading…
+    </main>
   );
 }
 
@@ -199,20 +203,16 @@ function RespondPage() {
   };
 
   if (loading) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-zinc-50 text-zinc-400">
-        Loading…
-      </main>
-    );
+    return <LoadingScreen />;
   }
 
   if (!data) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-zinc-50 px-6 text-center">
-        <h1 className="font-display text-2xl font-semibold">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-bg px-6 text-center">
+        <h1 className="font-ledger-serif text-2xl font-medium text-text-primary">
           This RFQ link isn&apos;t valid
         </h1>
-        <p className="max-w-md text-sm text-zinc-500">
+        <p className="max-w-md text-sm text-text-secondary">
           Double check the link the buyer shared with you, or ask
           them to resend it.
         </p>
@@ -228,65 +228,60 @@ function RespondPage() {
     .concat(data.requirements.additionalRequirements);
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950">
-      <nav className="bg-zinc-950">
-        <div className="mx-auto max-w-3xl px-8 py-5 font-display text-xl font-semibold tracking-tight text-white">
-          Procure<span className="text-amber-500">AI</span>
+    <main className="min-h-screen bg-bg text-text-primary">
+      <nav className="border-b border-border bg-bg">
+        <div className="mx-auto max-w-3xl px-8 py-5 font-ledger-serif text-xl font-medium tracking-tight text-text-primary">
+          Procure<span className="text-accent">AI</span>
         </div>
       </nav>
 
       <section className="mx-auto max-w-3xl px-8 py-14">
-        <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-          <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-          Request for quotation
-        </div>
+        <PageHeader
+          eyebrow="Request for quotation"
+          title={`Quote request for ${data.supplierName}`}
+          description={`RFQ ${data.rfqId}`}
+        />
 
-        <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">
-          Quote request for {data.supplierName}
-        </h1>
-
-        <p className="mt-2 text-sm text-zinc-500">RFQ {data.rfqId}</p>
-
-        <div className="mt-8 rounded-md border border-zinc-200 bg-white p-7">
+        <Card padding="lg" className="mt-8">
           {sr ? (
             <div className="grid gap-5 sm:grid-cols-2">
-              <SpecField label="Product" value={sr.product ?? data.requirements.product} />
-              <SpecField
+              <SpecValueField label="Product" value={sr.product ?? data.requirements.product} />
+              <SpecValueField
                 label="Quantity"
                 value={sr.quantity !== null ? sr.quantity.toLocaleString("en-IN") : ""}
               />
-              <SpecField label="Unit" value={sr.unit ?? ""} />
-              <SpecField label="Intended use" value={sr.intendedUse ?? ""} />
-              <SpecField label="Delivery location" value={sr.location ?? ""} />
-              <SpecField label="Deadline" value={sr.deliveryTimeframe ?? ""} />
-              <SpecField label="Budget / price basis" value={formatPrice(sr.price)} />
-              <SpecField label="Material" value={sr.material ?? ""} />
-              <SpecField label="Construction" value={joinList(sr.construction)} />
-              <SpecField label="Quality requirements" value={joinList(sr.qualityRequirements)} />
-              <SpecField label="Pricing preference" value={joinList(sr.pricingPreferences)} />
-              <SpecField
+              <SpecValueField label="Unit" value={sr.unit ?? ""} />
+              <SpecValueField label="Intended use" value={sr.intendedUse ?? ""} />
+              <SpecValueField label="Delivery location" value={sr.location ?? ""} />
+              <SpecValueField label="Deadline" value={sr.deliveryTimeframe ?? ""} />
+              <SpecValueField label="Budget / price basis" value={formatPrice(sr.price)} />
+              <SpecValueField label="Material" value={sr.material ?? ""} />
+              <SpecValueField label="Construction" value={joinList(sr.construction)} />
+              <SpecValueField label="Quality requirements" value={joinList(sr.qualityRequirements)} />
+              <SpecValueField label="Pricing preference" value={joinList(sr.pricingPreferences)} />
+              <SpecValueField
                 label="Sustainability requirements"
                 value={joinList(sr.sustainabilityRequirements)}
               />
-              <SpecField label="Certifications" value={joinList(sr.certifications)} />
-              <SpecField
+              <SpecValueField label="Certifications" value={joinList(sr.certifications)} />
+              <SpecValueField
                 label="Required capabilities"
                 value={joinList(sr.requiredCapabilities)}
               />
-              <SpecField
+              <SpecValueField
                 label="Customization"
                 value={joinList(sr.customizationRequirements)}
               />
-              <SpecField
+              <SpecValueField
                 label="Packaging requirements"
                 value={joinList(sr.packagingRequirements)}
               />
-              <SpecField
+              <SpecValueField
                 label="Shipping requirements"
                 value={joinList(sr.shippingRequirements)}
               />
-              <SpecField label="Payment terms" value={sr.paymentTerms ?? ""} />
-              <SpecField
+              <SpecValueField label="Payment terms" value={sr.paymentTerms ?? ""} />
+              <SpecValueField
                 label="Additional constraints"
                 value={joinList(sr.additionalConstraints)}
               />
@@ -294,76 +289,73 @@ function RespondPage() {
           ) : (
             <>
               <div className="grid gap-5 sm:grid-cols-2">
-                <SpecField
+                <SpecValueField
                   label="Product"
                   value={data.requirements.product}
                 />
-                <SpecField
+                <SpecValueField
                   label="Quantity"
                   value={data.requirements.quantity}
                 />
-                <SpecField
+                <SpecValueField
                   label="Delivery location"
                   value={data.requirements.location}
                 />
-                <SpecField
+                <SpecValueField
                   label="Required by"
                   value={data.requirements.deadline}
                 />
               </div>
 
               {specTags.length > 0 && (
-                <div className="mt-5 flex flex-wrap gap-2 border-t border-zinc-100 pt-5">
+                <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-5">
                   {specTags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600"
-                    >
+                    <Badge key={tag} tone="neutral">
                       {tag}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               )}
             </>
           )}
-        </div>
+        </Card>
 
         {submitted ? (
-          <div className="mt-8 rounded-md border border-emerald-500 bg-white p-7 text-center">
-            <h2 className="font-display text-xl font-semibold">
-              Quote submitted ✓
-            </h2>
+          <Card padding="lg" tone="accent" className="mt-8 text-center">
+            <Badge tone="success">Quote submitted</Badge>
 
-            <p className="mt-2 text-sm text-zinc-500">
+            <p className="mt-4 text-sm text-text-secondary">
               The buyer can now see your quote and will compare it
               against other suppliers.
             </p>
 
-            <button
+            <Button
+              variant="secondary"
               onClick={() => setSubmitted(false)}
-              className="mt-5 rounded-full border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 transition hover:border-zinc-950 hover:text-zinc-950"
+              className="mt-5"
             >
               Edit my quote
-            </button>
-          </div>
+            </Button>
+          </Card>
         ) : (
-          <div className="mt-8 rounded-md border border-zinc-200 bg-white p-7">
-            <h2 className="font-display text-xl font-semibold">Your quote</h2>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-500">
+          <Card padding="lg" className="mt-8">
+            <h2 className="font-ledger-serif text-xl font-medium text-text-primary">
+              Your quote
+            </h2>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-text-secondary">
               Share the price and delivery terms you can commit to. Blank
               optional fields remain unspecified for the buyer to confirm.
             </p>
 
             <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <Field label="Unit price (₹)" required>
-                <input
+                <TextInput
                   type="number"
                   min="0"
                   value={form.unitPrice}
                   onChange={(e) =>
                     setForm({ ...form, unitPrice: e.target.value })
                   }
-                  className={inputClass}
                 />
               </Field>
 
@@ -375,7 +367,7 @@ function RespondPage() {
                     : undefined
                 }
               >
-                <input
+                <TextInput
                   type="number"
                   min="0"
                   placeholder={data.requirements.quantity || undefined}
@@ -386,7 +378,6 @@ function RespondPage() {
                       quotedQuantity: e.target.value,
                     })
                   }
-                  className={inputClass}
                 />
               </Field>
 
@@ -394,19 +385,18 @@ function RespondPage() {
                 label="Minimum order quantity"
                 hint="Leave blank if you have no minimum."
               >
-                <input
+                <TextInput
                   type="number"
                   min="0"
                   value={form.moq}
                   onChange={(e) =>
                     setForm({ ...form, moq: e.target.value })
                   }
-                  className={inputClass}
                 />
               </Field>
 
               <Field label="Lead time (days)" required>
-                <input
+                <TextInput
                   type="number"
                   min="0"
                   value={form.leadTimeDays}
@@ -416,7 +406,6 @@ function RespondPage() {
                       leadTimeDays: e.target.value,
                     })
                   }
-                  className={inputClass}
                 />
               </Field>
 
@@ -424,7 +413,7 @@ function RespondPage() {
                 label="Shipping cost (₹)"
                 hint="Enter 0 for free shipping. Leave blank if you don't know yet."
               >
-                <input
+                <TextInput
                   type="number"
                   min="0"
                   placeholder="e.g. 0 for free shipping"
@@ -435,7 +424,6 @@ function RespondPage() {
                       shippingCost: e.target.value,
                     })
                   }
-                  className={inputClass}
                 />
               </Field>
 
@@ -443,7 +431,7 @@ function RespondPage() {
                 label="GST / Tax (%)"
                 hint="Enter 0 if no tax applies. Leave blank if you don't know yet."
               >
-                <input
+                <TextInput
                   type="number"
                   min="0"
                   placeholder="e.g. 18"
@@ -451,12 +439,11 @@ function RespondPage() {
                   onChange={(e) =>
                     setForm({ ...form, taxPercent: e.target.value })
                   }
-                  className={inputClass}
                 />
               </Field>
 
               <Field label="Payment terms">
-                <select
+                <Select
                   value={form.paymentTerms}
                   onChange={(e) =>
                     setForm({
@@ -464,91 +451,65 @@ function RespondPage() {
                       paymentTerms: e.target.value,
                     })
                   }
-                  className={inputClass}
                 >
                   {PAYMENT_TERMS_OPTIONS.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
                   ))}
-                </select>
+                </Select>
               </Field>
 
               <Field label="Quote valid until">
-                <input
+                <TextInput
                   type="date"
                   value={form.validUntil}
                   onChange={(e) =>
                     setForm({ ...form, validUntil: e.target.value })
                   }
-                  className={inputClass}
                 />
               </Field>
 
               <Field label="Notes (optional)">
-                <input
+                <TextInput
                   type="text"
                   value={form.notes}
                   onChange={(e) =>
                     setForm({ ...form, notes: e.target.value })
                   }
-                  className={inputClass}
                 />
               </Field>
             </div>
 
             {error && (
-              <p className="mt-4 text-sm text-red-600">{error}</p>
+              <Notice tone="danger" className="mt-4">
+                {error}
+              </Notice>
             )}
 
-            <button
+            <Button
+              variant="primary"
               onClick={handleSubmit}
               disabled={submitting}
-              className="mt-6 w-full rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-6 w-full"
             >
               {submitting ? "Submitting…" : "Submit quote"}
-            </button>
-          </div>
+            </Button>
+          </Card>
         )}
       </section>
     </main>
   );
 }
 
-function SpecField({ label, value }: { label: string; value: string }) {
+function SpecValueField({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+      <p className="font-ledger-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-text-tertiary">
         {label}
       </p>
 
-      <p className="mt-1 font-medium">{value || "Not specified"}</p>
+      <p className="mt-1 font-medium text-text-primary">{value || "Not specified"}</p>
     </div>
-  );
-}
-
-function Field({
-  label,
-  required,
-  hint,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  hint?: string;
-  children: ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-        {label} {required && <span className="text-amber-600">*</span>}
-      </span>
-
-      <div className="mt-1.5">{children}</div>
-
-      {hint && (
-        <span className="mt-1 block text-xs text-zinc-400">{hint}</span>
-      )}
-    </label>
   );
 }

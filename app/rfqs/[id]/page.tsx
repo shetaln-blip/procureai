@@ -29,6 +29,18 @@ import {
   toSupplierFacingRequirement,
   type SupplierFacingRequirement,
 } from "@/lib/extraction/supplier-view";
+import {
+  Badge,
+  type BadgeTone,
+  Button,
+  Card,
+  EmptyState,
+  Notice,
+  PageHeader,
+  Table,
+  Th,
+  Td,
+} from "@/components/ui";
 
 // The RFQ detail response additively includes these three maps
 // (app/api/rfqs/[id]/route.ts) alongside every existing RFQ field —
@@ -47,10 +59,12 @@ const STATUS_LABEL: Record<RFQStatus, string> = {
   awarded: "Awarded",
 };
 
-const pillOutline =
-  "rounded-full border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 transition hover:border-zinc-950 hover:text-zinc-950";
-const pillPrimary =
-  "rounded-full bg-amber-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50";
+const STATUS_TONE: Record<RFQStatus, BadgeTone> = {
+  draft: "neutral",
+  sent: "warning",
+  quotes_received: "accent",
+  awarded: "success",
+};
 
 function formatPrice(price: SupplierFacingRequirement["price"]): string {
   if (!price || price.amount === null) return "";
@@ -224,7 +238,7 @@ export default function RFQDetailPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-zinc-50 text-zinc-400">
+      <main className="flex min-h-screen items-center justify-center bg-bg text-text-secondary">
         Loading RFQ…
       </main>
     );
@@ -232,11 +246,13 @@ export default function RFQDetailPage() {
 
   if (notFound || !rfq) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-zinc-50 text-center">
-        <h1 className="font-display text-2xl font-semibold">RFQ not found</h1>
+      <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-bg text-center text-text-secondary">
+        <h1 className="font-ledger-serif text-2xl font-medium text-text-primary">
+          RFQ not found
+        </h1>
         <Link
           href="/rfqs"
-          className="border-b border-dashed border-zinc-400 pb-0.5 text-sm font-medium text-zinc-950 hover:border-zinc-950"
+          className="border-b border-dashed border-border-strong pb-0.5 text-sm font-medium text-text-primary transition hover:border-accent hover:text-accent"
         >
           Back to RFQs
         </Link>
@@ -258,42 +274,40 @@ export default function RFQDetailPage() {
     : null;
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950">
-      <nav className="bg-zinc-950">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
+    <main className="min-h-screen bg-bg text-text-primary">
+      <nav className="border-b border-border bg-bg">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-8">
           <Link
             href="/"
-            className="font-display text-xl font-semibold tracking-tight text-white"
+            className="font-ledger-serif text-xl font-medium tracking-tight text-text-primary"
           >
-            Procure<span className="text-amber-500">AI</span>
+            Procure<span className="text-accent">AI</span>
           </Link>
 
           <Link
             href="/rfqs"
-            className="text-sm text-zinc-400 transition hover:text-white"
+            className="font-ledger-mono text-[11px] uppercase tracking-[0.06em] text-text-secondary transition hover:text-text-primary"
           >
             ← All RFQs
           </Link>
         </div>
       </nav>
 
-      <section className="mx-auto max-w-5xl px-8 py-16">
-        <div className="flex flex-wrap items-center gap-4">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-            {rfq.id}
-          </span>
+      <section className="mx-auto max-w-5xl px-6 py-16 sm:px-8">
+        <PageHeader
+          eyebrow={rfq.id}
+          eyebrowTone={STATUS_TONE[rfq.status]}
+          title={rfq.requirements.product || rfq.query}
+          meta={
+            <div className="mt-4">
+              <Badge tone={STATUS_TONE[rfq.status]} dot>
+                {STATUS_LABEL[rfq.status]}
+              </Badge>
+            </div>
+          }
+        />
 
-          <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-            {STATUS_LABEL[rfq.status]}
-          </span>
-        </div>
-
-        <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight">
-          {rfq.requirements.product || rfq.query}
-        </h1>
-
-        <div className="mt-6 grid gap-2 sm:grid-cols-3">
+        <div className="mt-8 grid gap-2 sm:grid-cols-3">
           {[
             { step: "1", label: "Select suppliers", active: true },
             { step: "2", label: "Send RFQ", active: true },
@@ -307,15 +321,15 @@ export default function RFQDetailPage() {
               key={step}
               className={`flex items-center gap-3 rounded-md border px-4 py-3 ${
                 active
-                  ? "border-zinc-300 bg-white text-zinc-900"
-                  : "border-zinc-200 bg-zinc-50 text-zinc-400"
+                  ? "border-border-strong bg-surface text-text-primary"
+                  : "border-border bg-surface-sunken text-text-tertiary"
               }`}
             >
               <span
                 className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
                   active
-                    ? "bg-zinc-950 text-white"
-                    : "border border-zinc-300 text-zinc-400"
+                    ? "bg-accent text-accent-contrast"
+                    : "border border-border-strong text-text-tertiary"
                 }`}
               >
                 {step}
@@ -326,9 +340,9 @@ export default function RFQDetailPage() {
         </div>
 
         {/* RFQ SPEC */}
-        <div className="mt-8 rounded-md border border-zinc-200 bg-white p-7">
-          <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+        <Card padding="lg" className="mt-8">
+          <div className="eyebrow text-accent">
+            <span className="eyebrow-dot bg-accent" />
             Request for quotation
           </div>
 
@@ -397,8 +411,8 @@ export default function RFQDetailPage() {
               </div>
 
               {specTags.length > 0 && (
-                <div className="mt-5 border-t border-zinc-100 pt-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                <div className="mt-5 border-t border-border pt-5">
+                  <p className="font-ledger-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
                     Specifications
                   </p>
 
@@ -406,7 +420,7 @@ export default function RFQDetailPage() {
                     {specTags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-md border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600"
+                        className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-text-secondary"
                       >
                         {tag}
                       </span>
@@ -417,12 +431,12 @@ export default function RFQDetailPage() {
             </>
           )}
 
-          <div className="mt-5 border-t border-zinc-100 pt-5">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+          <div className="mt-5 border-t border-border pt-5">
+            <p className="font-ledger-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
               Suppliers should provide
             </p>
 
-            <ul className="mt-2 grid gap-1 text-sm text-zinc-600 sm:grid-cols-2">
+            <ul className="mt-2 grid gap-1 text-sm text-text-secondary sm:grid-cols-2">
               <li>• Unit price</li>
               <li>• Minimum order quantity</li>
               <li>• Lead time</li>
@@ -432,15 +446,15 @@ export default function RFQDetailPage() {
               <li>• Quote validity</li>
             </ul>
           </div>
-        </div>
+        </Card>
 
         {/* INVITED SUPPLIERS */}
         <div className="mt-10">
-          <h2 className="font-display text-xl font-semibold">
+          <h2 className="font-ledger-serif text-xl font-medium text-text-primary">
             Invited suppliers ({rfq.suppliers.length})
           </h2>
 
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-text-secondary">
             There&apos;s no email integration yet — copy each
             supplier&apos;s link and send it however you&apos;d
             normally reach them.
@@ -448,25 +462,25 @@ export default function RFQDetailPage() {
 
           <div className="mt-5 grid gap-3">
             {rfq.suppliers.map((supplier) => (
-              <div
+              <Card
                 key={supplier.vendorId}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white px-5 py-4"
+                padding="sm"
+                className="flex flex-wrap items-center justify-between gap-3"
               >
                 <div className="flex items-center gap-3">
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full ${
-                      supplier.status === "quoted"
-                        ? "bg-emerald-500"
-                        : "bg-amber-500"
-                    }`}
-                  />
+                  <Badge
+                    tone={supplier.status === "quoted" ? "success" : "warning"}
+                    dot
+                  >
+                    {supplier.status === "quoted" ? "Quoted" : "Invited"}
+                  </Badge>
 
                   <div>
-                    <p className="font-medium">
+                    <p className="font-medium text-text-primary">
                       {supplier.vendorName}
                     </p>
 
-                    <p className="text-xs text-zinc-400">
+                    <p className="text-xs text-text-tertiary">
                       {supplier.status === "quoted"
                         ? "Quote received"
                         : "Awaiting response"}
@@ -474,28 +488,29 @@ export default function RFQDetailPage() {
                   </div>
                 </div>
 
-                <button
+                <Button
+                  variant="secondary"
+                  size="sm"
                   onClick={() => copyLink(supplier.vendorId)}
-                  className={pillOutline}
                 >
                   {copiedVendorId === supplier.vendorId
                     ? "Link copied ✓"
                     : "Copy response link"}
-                </button>
-              </div>
+                </Button>
+              </Card>
             ))}
           </div>
         </div>
 
         {/* PRICE INTELLIGENCE */}
         {scored.length > 0 && (
-          <div className="mt-10 rounded-md border border-zinc-200 bg-white p-7">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+          <Card padding="lg" className="mt-10">
+            <div className="eyebrow text-accent">
+              <span className="eyebrow-dot bg-accent" />
               Price intelligence — this RFQ
             </div>
 
-            <p className="mt-2 text-xs text-zinc-400">
+            <p className="mt-2 text-xs text-text-tertiary">
               Derived only from the {scored.length} quote
               {scored.length === 1 ? "" : "s"} received on this RFQ.
               Supplier-specific history comes from ProcureAI&apos;s own
@@ -534,339 +549,333 @@ export default function RFQDetailPage() {
                 }
               />
             </div>
-          </div>
+          </Card>
         )}
 
         {/* RECOMMENDATION */}
         {scored.length > 0 && (
-          <div
-            className={`mt-10 rounded-md border p-6 ${
-              recommendation.quote
-                ? recommendation.caveat
-                  ? "border-amber-400 bg-amber-50"
-                  : "border-emerald-500 bg-emerald-50"
-                : "border-zinc-300 bg-zinc-100"
-            }`}
-          >
-            {recommendation.quote ? (
-              <>
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-                      {recommendation.caveat ? "Closest option" : "Recommended quote"}
-                    </p>
-                    <p className="mt-1 font-display text-xl font-semibold">
-                      {recommendation.quote.vendorName}
-                    </p>
-                    <p className="mt-1 text-sm text-zinc-600">
-                      {summarizeReasons(recommendation.quote.reasons)}
-                    </p>
+          <div className="mt-10">
+            <h2 className="font-ledger-serif text-xl font-medium text-text-primary">
+              Recommendation
+            </h2>
+
+            <Card
+              tone={recommendation.quote && !recommendation.caveat ? "accent" : "surface"}
+              padding="lg"
+              className="mt-4"
+            >
+              {recommendation.quote ? (
+                <>
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
+                        {recommendation.caveat ? "Closest option" : "Recommended quote"}
+                      </p>
+                      <p className="mt-1 font-ledger-serif text-xl font-medium text-text-primary">
+                        {recommendation.quote.vendorName}
+                      </p>
+                      <p className="mt-1 text-sm text-text-secondary">
+                        {summarizeReasons(recommendation.quote.reasons)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
+                        Landed cost
+                      </p>
+                      <p className="tabular font-ledger-mono text-2xl font-semibold text-text-primary">
+                        {formatCurrency(recommendation.quote.cost.total)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-                      Landed cost
-                    </p>
-                    <p className="font-display text-2xl font-bold text-zinc-950">
-                      {formatCurrency(recommendation.quote.cost.total)}
-                    </p>
-                  </div>
-                </div>
-                {recommendation.caveat && (
-                  <p className="mt-1 text-sm text-zinc-600">
-                    {recommendation.caveat}
+                  {recommendation.caveat && (
+                    <Notice tone="warning" className="mt-4">
+                      {recommendation.caveat}
+                    </Notice>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p className="font-ledger-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
+                    No clear recommendation
                   </p>
-                )}
-              </>
-            ) : (
-              <>
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-                  No clear recommendation
-                </p>
-                <p className="mt-1 text-sm text-zinc-600">
-                  {recommendation.caveat}
-                </p>
-              </>
-            )}
-            <p className="mt-2 text-xs text-zinc-400">
-              You can still award any quote below — this is a starting
-              point, not a decision.
-            </p>
+                  <Notice tone="warning" className="mt-3">
+                    {recommendation.caveat}
+                  </Notice>
+                </>
+              )}
+              <p className="mt-3 text-xs text-text-tertiary">
+                You can still award any quote below — this is a starting
+                point, not a decision.
+              </p>
+            </Card>
           </div>
         )}
 
         {/* QUOTES */}
         <div className="mt-10">
-          <h2 className="font-display text-xl font-semibold">
+          <h2 className="font-ledger-serif text-xl font-medium text-text-primary">
             Quotes ({scored.length}/{rfq.suppliers.length})
           </h2>
 
           {requestedQuantity !== null && (
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-text-secondary">
               Buyer requested quantity:{" "}
-              <span className="font-medium text-zinc-800">
+              <span className="tabular font-medium text-text-primary">
                 {requestedQuantity.toLocaleString("en-IN")}
               </span>
             </p>
           )}
 
           {scored.length === 0 ? (
-            <p className="mt-4 text-sm text-zinc-500">
-              No quotes yet. Once a supplier submits one, ProcureAI
-              will rank it here automatically.
-            </p>
+            <EmptyState
+              title="No quotes yet"
+              description="Once a supplier submits one, ProcureAI will rank it here automatically."
+            />
           ) : (
-            <div className="mt-5 grid gap-4">
-              {scored.map((quote) => {
-                const isBest =
-                  quote.id === bestQuoteId &&
-                  rfq.status !== "awarded";
-                const isAwarded =
-                  rfq.purchaseOrder?.quoteId === quote.id;
+            <div className="mt-5">
+              <Table>
+                <thead>
+                  <tr>
+                    <Th>Supplier</Th>
+                    <Th>Price</Th>
+                    <Th>MOQ</Th>
+                    <Th>Lead time</Th>
+                    <Th>Shipping</Th>
+                    <Th>Payment terms</Th>
+                    <Th>Match score</Th>
+                    <Th>Risk</Th>
+                    <Th>Recommendation</Th>
+                    <Th>Action</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {scored.map((quote) => {
+                    const isBest =
+                      quote.id === bestQuoteId &&
+                      rfq.status !== "awarded";
+                    const isAwarded =
+                      rfq.purchaseOrder?.quoteId === quote.id;
 
-                const moqCompat = formatCompatibility(
-                  quote.moqCompatible,
-                  "Compatible with requested quantity",
-                  "MOQ not compatible",
-                  "MOQ not specified"
-                );
-                const deadlineCompat = formatCompatibility(
-                  quote.deadlineCompatible,
-                  "Meets deadline",
-                  "Deadline may not be met",
-                  deadlineDate === null
-                    ? "No deadline specified"
-                    : "Cannot determine — lead time not specified"
-                );
+                    const moqBadge: { tone: BadgeTone; label: string } =
+                      quote.moqCompatible === true
+                        ? { tone: "success", label: "Compatible" }
+                        : quote.moqCompatible === false
+                          ? { tone: "danger", label: "Below MOQ" }
+                          : { tone: "neutral", label: "Not specified" };
 
-                const historicalCount =
-                  rfq.supplierHistoricalQuoteCount[quote.vendorId] ?? 0;
-                const historicalPrice =
-                  rfq.supplierHistoricalPrice[quote.vendorId] ?? null;
-                const showHistorical =
-                  hasGenuineHistoricalPrice(historicalCount) &&
-                  historicalPrice !== null;
+                    const deadlineCompat = formatCompatibility(
+                      quote.deadlineCompatible,
+                      "Meets deadline",
+                      "Deadline may not be met",
+                      deadlineDate === null
+                        ? "No deadline specified"
+                        : "Cannot determine — lead time not specified"
+                    );
 
-                return (
-                  <div
-                    key={quote.id}
-                    className={`rounded-md border bg-white p-6 ${
-                      isBest || isAwarded
-                        ? "border-zinc-950"
-                        : "border-zinc-200"
-                    }`}
-                  >
-                    <div className="flex flex-wrap items-start justify-between gap-4">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-3">
-                          <h3 className="font-display text-lg font-semibold">
+                    const historicalCount =
+                      rfq.supplierHistoricalQuoteCount[quote.vendorId] ?? 0;
+                    const historicalPrice =
+                      rfq.supplierHistoricalPrice[quote.vendorId] ?? null;
+                    const showHistorical =
+                      hasGenuineHistoricalPrice(historicalCount) &&
+                      historicalPrice !== null;
+
+                    // "Quote validity has expired" is already surfaced
+                    // via the dedicated Expired badge below — filtered
+                    // out here so it isn't shown twice.
+                    const riskReasons = quote.reasons.filter(
+                      (reason: Reason) =>
+                        reason.label !== "Quote validity has expired"
+                    );
+
+                    return (
+                      <tr
+                        key={quote.id}
+                        className={isBest ? "bg-accent-soft" : undefined}
+                      >
+                        <Td>
+                          <p className="font-ledger-serif text-base font-medium text-text-primary">
                             {quote.vendorName}
-                          </h3>
-
-                          {isAwarded && (
-                            <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
-                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                              Awarded
-                            </span>
+                          </p>
+                          <p className="mt-1 text-[11px] text-text-tertiary">
+                            Confidence: {formatConfidence(quote.supplierConfidence)}
+                          </p>
+                          {quote.notes && (
+                            <p className="mt-1.5 max-w-[220px] text-xs italic leading-5 text-text-secondary">
+                              “{quote.notes}”
+                            </p>
                           )}
+                        </Td>
 
-                          {isBest && !isAwarded && (
-                            <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-600">
-                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                              {recommendation.caveat
-                                ? "Closest option"
-                                : "Recommended"}
-                            </span>
+                        <Td>
+                          <p className="tabular font-ledger-mono text-sm text-text-primary">
+                            ₹{quote.unitPrice.toLocaleString("en-IN")}
+                            <span className="text-text-tertiary"> / unit</span>
+                          </p>
+                          <div className="mt-2 border-t border-border pt-2">
+                            <p className="tabular font-ledger-mono text-base font-semibold text-text-primary">
+                              {formatCurrency(quote.cost.total)}
+                            </p>
+                            <p className="mt-0.5 text-[11px] text-text-tertiary">
+                              {quote.cost.totalLabelText}
+                            </p>
+                          </div>
+                          <p className="mt-2 text-[11px] text-text-tertiary">
+                            {quote.cost.quantityBasis === "quoted"
+                              ? `Qty ${quote.cost.quantityUsed.toLocaleString("en-IN")} (quoted)`
+                              : quote.cost.quantityBasis === "requested_fallback"
+                                ? `Qty ${quote.cost.quantityUsed.toLocaleString("en-IN")} (buyer's requested qty)`
+                                : "Qty unknown"}
+                            {" · GST "}
+                            {formatTaxRate(quote.taxPercent)}
+                          </p>
+                          {showHistorical && (
+                            <p className="mt-2 text-[11px] text-text-tertiary">
+                              Supplier avg on ProcureAI ({historicalCount} quotes): ₹
+                              {(historicalPrice as number).toLocaleString("en-IN")}
+                            </p>
                           )}
-                        </div>
+                          <p className="mt-2 font-ledger-mono text-[10px] uppercase tracking-[0.06em] text-text-tertiary">
+                            {quote.priceScore}/100 price score
+                          </p>
+                        </Td>
 
-                        <div className="mt-2 flex flex-wrap gap-1.5">
-                          {quote.reasons.length > 0 ? (
-                            quote.reasons.map((reason: Reason, idx) => (
-                              <span
-                                key={`${reason.label}-${idx}`}
-                                className={`rounded-md px-2.5 py-1 text-xs font-medium ${
-                                  reason.type === "positive"
-                                    ? "bg-emerald-50 text-emerald-700"
-                                    : "bg-amber-50 text-amber-700"
-                                }`}
-                              >
+                        <Td>
+                          <p className="tabular text-sm text-text-primary">
+                            {formatMoq(quote.moq)}
+                          </p>
+                          <Badge tone={moqBadge.tone} className="mt-2">
+                            {moqBadge.label}
+                          </Badge>
+                        </Td>
+
+                        <Td>
+                          <p className="tabular text-sm text-text-primary">
+                            {quote.leadTimeDays > 0
+                              ? `${quote.leadTimeDays} days`
+                              : "Not specified"}
+                          </p>
+                          <p className="mt-1 font-ledger-mono text-[10px] uppercase tracking-[0.06em] text-text-tertiary">
+                            {quote.leadTimeScore}/100 lead-time score
+                          </p>
+                          {quote.deadlineCompatible === false && (
+                            <Badge tone="warning" className="mt-2">
+                              {deadlineCompat.text}
+                            </Badge>
+                          )}
+                          <div className="mt-2">
+                            <CompatibilityDetail
+                              label="Required deadline"
+                              compat={deadlineCompat}
+                            />
+                          </div>
+                          <p className="mt-2 text-[11px] text-text-tertiary">
+                            {quote.validUntil
+                              ? `Valid until ${quote.validUntil}`
+                              : "Validity not specified"}
+                          </p>
+                        </Td>
+
+                        <Td>
+                          <p className="tabular text-sm text-text-primary">
+                            {formatShipping(quote.shippingCost)}
+                          </p>
+                        </Td>
+
+                        <Td>
+                          <p className="text-sm text-text-primary">
+                            {quote.paymentTerms || "Not specified"}
+                          </p>
+                          <p className="mt-1 font-ledger-mono text-[10px] uppercase tracking-[0.06em] text-text-tertiary">
+                            {quote.paymentScore}/100 payment score
+                          </p>
+                        </Td>
+
+                        <Td>
+                          <p className="tabular font-ledger-mono text-lg font-semibold text-text-primary">
+                            {quote.totalScore}
+                            <span className="text-text-tertiary">/100</span>
+                          </p>
+                        </Td>
+
+                        <Td>
+                          <div className="flex flex-wrap gap-1.5">
+                            {quote.quoteExpired && (
+                              <Badge tone="danger">Expired</Badge>
+                            )}
+                            {riskReasons.map((reason: Reason, idx) => (
+                              <Badge key={`${reason.label}-${idx}`} tone="warning">
                                 {reason.label}
+                              </Badge>
+                            ))}
+                            {!quote.quoteExpired && riskReasons.length === 0 && (
+                              <span className="text-xs text-text-tertiary">
+                                No flags
                               </span>
-                            ))
+                            )}
+                          </div>
+                        </Td>
+
+                        <Td>
+                          {isAwarded ? (
+                            <Badge tone="success">Awarded</Badge>
+                          ) : isBest ? (
+                            <Badge tone="accent">
+                              {recommendation.caveat ? "Closest option" : "Recommended"}
+                            </Badge>
                           ) : (
-                            <span className="rounded-md bg-zinc-50 px-2.5 py-1 text-xs font-medium text-zinc-500">
-                              Balanced across price, delivery and payment terms
-                            </span>
+                            <span className="text-xs text-text-tertiary">—</span>
                           )}
-                        </div>
-                      </div>
+                        </Td>
 
-                      <div className="text-right">
-                        <div className="font-display text-2xl font-bold text-zinc-950">
-                          {quote.totalScore}/100
-                        </div>
-
-                        <p className="text-[11px] uppercase tracking-wider text-zinc-400">
-                          quote score
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Total landed cost callout */}
-                    <div className="mt-5 rounded-md border border-zinc-100 bg-zinc-50 p-4">
-                      <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-                          Total landed cost
-                        </p>
-                        <p className="text-xs font-medium text-zinc-500">
-                          {quote.cost.totalLabelText}
-                        </p>
-                      </div>
-                      <p className="mt-1 font-display text-2xl font-bold text-zinc-950">
-                        {formatCurrency(quote.cost.total)}
-                      </p>
-                      <p className="mt-1 text-xs text-zinc-400">
-                        {quote.cost.quantityBasis === "quoted"
-                          ? `Based on the supplier's quoted quantity (${quote.cost.quantityUsed.toLocaleString("en-IN")})`
-                          : quote.cost.quantityBasis === "requested_fallback"
-                            ? `Supplier didn't quote a quantity — using the buyer's requested quantity (${quote.cost.quantityUsed.toLocaleString("en-IN")})`
-                            : "Cannot calculate — no quantity available"}
-                      </p>
-                    </div>
-
-                    <div className="mt-5 grid gap-4 border-t border-zinc-100 pt-5 sm:grid-cols-4">
-                      <QuoteDetail
-                        label="Unit price"
-                        value={`₹${quote.unitPrice.toLocaleString("en-IN")}`}
-                        sub={`${quote.priceScore}/100`}
-                      />
-                      <QuoteDetail
-                        label="Quoted quantity"
-                        value={
-                          quote.quotedQuantity
-                            ? quote.quotedQuantity.toLocaleString("en-IN")
-                            : "Not specified"
-                        }
-                      />
-                      <QuoteDetail
-                        label="Lead time"
-                        value={
-                          quote.leadTimeDays > 0
-                            ? `${quote.leadTimeDays} days`
-                            : "Not specified"
-                        }
-                        sub={`${quote.leadTimeScore}/100`}
-                      />
-                      <QuoteDetail
-                        label="Payment terms"
-                        value={quote.paymentTerms || "Not specified"}
-                        sub={`${quote.paymentScore}/100`}
-                      />
-                    </div>
-
-                    <div className="mt-4 grid gap-4 sm:grid-cols-4">
-                      <QuoteDetail label="MOQ" value={formatMoq(quote.moq)} />
-                      <QuoteDetail
-                        label="Shipping"
-                        value={formatShipping(quote.shippingCost)}
-                      />
-                      <QuoteDetail
-                        label="GST / Tax"
-                        value={formatTaxRate(quote.taxPercent)}
-                      />
-                      <QuoteDetail
-                        label="Valid until"
-                        value={
-                          quote.validUntil
-                            ? `${quote.validUntil}${quote.quoteExpired ? " (expired)" : ""}`
-                            : "Not specified"
-                        }
-                      />
-                    </div>
-
-                    <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                      <CompatibilityDetail
-                        label="Requested quantity"
-                        compat={moqCompat}
-                      />
-                      <CompatibilityDetail
-                        label="Required deadline"
-                        compat={deadlineCompat}
-                      />
-                      <QuoteDetail
-                        label="Supplier confidence"
-                        value={formatConfidence(quote.supplierConfidence)}
-                      />
-                    </div>
-
-                    {showHistorical && (
-                      <p className="mt-4 text-xs text-zinc-400">
-                        ProcureAI-derived: this supplier&apos;s average
-                        quoted unit price across {historicalCount} quotes
-                        on ProcureAI is ₹
-                        {(historicalPrice as number).toLocaleString("en-IN")}.
-                      </p>
-                    )}
-
-                    {quote.notes && (
-                      <p className="mt-4 rounded-md border border-zinc-100 bg-zinc-50 p-3 text-sm italic text-zinc-600">
-                        “{quote.notes}”
-                      </p>
-                    )}
-
-                    {rfq.status !== "awarded" &&
-                      (quote.moqCompatible === false ||
-                        quote.deadlineCompatible === false ||
-                        quote.cost.total === null) && (
-                        <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                          <span className="font-semibold">Review before awarding:</span>{" "}
-                          {quote.cost.total === null
-                            ? "the landed cost cannot be calculated from the supplied data."
-                            : quote.moqCompatible === false
-                              ? "the MOQ is above the buyer's requested quantity."
-                              : "the stated lead time may miss the buyer's deadline."}
-                        </div>
-                      )}
-
-                    {rfq.status !== "awarded" && (
-                      <div className="mt-5 flex justify-end border-t border-zinc-100 pt-5">
-                        <button
-                          onClick={() => award(quote.id)}
-                          disabled={awarding === quote.id}
-                          className={pillPrimary}
-                        >
-                          {awarding === quote.id
-                            ? "Awarding…"
-                            : "Award this quote · Generate PO"}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                        <Td>
+                          {rfq.status !== "awarded" ? (
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              onClick={() => award(quote.id)}
+                              disabled={awarding === quote.id}
+                            >
+                              {awarding === quote.id ? "Awarding…" : "Award"}
+                            </Button>
+                          ) : isAwarded ? (
+                            <span className="text-xs text-success">Awarded</span>
+                          ) : (
+                            <span className="text-xs text-text-tertiary">—</span>
+                          )}
+                        </Td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             </div>
           )}
 
           {awardError && (
-            <p className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            <Notice tone="danger" className="mt-4">
               {awardError}
-            </p>
+            </Notice>
           )}
         </div>
 
         {/* PURCHASE ORDER */}
         {rfq.purchaseOrder && (
-          <div className="mt-10 rounded-md border border-emerald-500 bg-white p-7">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Purchase order
+          <Card tone="accent" padding="lg" className="mt-10">
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge tone="success" dot>
+                Awarded
+              </Badge>
+              <span className="font-ledger-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
+                Purchase order
+              </span>
             </div>
 
-            <h2 className="mt-2 font-display text-2xl font-semibold">
+            <h2 className="mt-3 font-ledger-serif text-2xl font-medium text-text-primary">
               {rfq.purchaseOrder.poNumber}
             </h2>
 
-            <p className="mt-2 text-sm text-emerald-700">
+            <p className="mt-2 text-sm text-text-secondary">
               Purchase order created successfully. The award is now locked to{" "}
               {rfq.purchaseOrder.vendorName}.
             </p>
@@ -925,7 +934,7 @@ export default function RFQDetailPage() {
                 value={rfq.purchaseOrder.deliveryBy}
               />
             </div>
-          </div>
+          </Card>
         )}
       </section>
     </main>
@@ -935,11 +944,11 @@ export default function RFQDetailPage() {
 function SpecField({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+      <p className="font-ledger-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
         {label}
       </p>
 
-      <p className="mt-1 font-medium">{value || "Not specified"}</p>
+      <p className="mt-1 font-medium text-text-primary">{value || "Not specified"}</p>
     </div>
   );
 }
@@ -955,15 +964,15 @@ function QuoteDetail({
 }) {
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+      <p className="font-ledger-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
         {label}
       </p>
 
-      <p className="mt-1 text-sm font-medium text-zinc-800">
+      <p className="mt-1 text-sm font-medium text-text-primary">
         {value}
       </p>
 
-      {sub && <p className="text-xs text-zinc-400">{sub}</p>}
+      {sub && <p className="text-xs text-text-tertiary">{sub}</p>}
     </div>
   );
 }
@@ -977,14 +986,14 @@ function CompatibilityDetail({
 }) {
   const toneClass =
     compat.tone === "good"
-      ? "text-emerald-700"
+      ? "text-success"
       : compat.tone === "bad"
-        ? "text-red-700"
-        : "text-zinc-500";
+        ? "text-danger"
+        : "text-text-tertiary";
 
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+      <p className="font-ledger-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-text-secondary">
         {label}
       </p>
 
