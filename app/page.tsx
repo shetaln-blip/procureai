@@ -7,6 +7,13 @@ import type { MatchedSupplier, SearchMeta } from "@/lib/matching";
 import type { ProcurementRequirement } from "@/lib/extraction/schema";
 import type { RetrievalMeta } from "@/lib/moss/types";
 import type { SupplierPerformance } from "@/lib/supplier-types";
+import { buildEvidenceItems, formatEvidenceDate } from "@/lib/evidence";
+import {
+  buildDecisionTrace,
+  type DecisionTraceRequirementInput,
+} from "@/lib/decision-trace";
+import { diagnoseSearchOutcome } from "@/lib/search-diagnostics";
+import { DecisionTrace } from "@/components/decision/DecisionTrace";
 import {
   Badge,
   Button,
@@ -196,82 +203,23 @@ const TIER_BADGE_TONE: Record<string, "success" | "warning" | "neutral"> = {
   weak: "neutral",
 };
 
-// Human-readable labels for the dot-path field ids that
-// lib/ingestion/normalize.ts records against each source (e.g.
-// "identity.companyName"). Falls back to a readable version of the raw
-// path for anything not listed here, so a future source citing a field
-// this map doesn't know about still renders something sensible.
-const EVIDENCE_FIELD_LABELS: Record<string, string> = {
-  "identity.companyName": "Company name",
-  "identity.legalName": "Legal name",
-  "identity.website": "Website",
-  "identity.contact.email": "Email",
-  "identity.contact.phone": "Phone",
-  "identity.location": "Location",
-  "identity.citiesServed": "Cities served",
-  "capabilities.categories": "Category",
-  "capabilities.products": "Products",
-  "capabilities.productDescription": "Product description",
-  "capabilities.manufacturingStatus": "Manufacturing status",
-  "capabilities.manufacturingCapabilities": "Manufacturing capabilities",
-  "capabilities.customizationCapabilities": "Customization capabilities",
-  "capabilities.industriesServed": "Industries served",
-  "capabilities.capacity": "Capacity",
-  "commercial.moq": "Minimum order quantity",
-  "commercial.priceRange": "Pricing",
-  "commercial.leadTime": "Lead time",
-  "commercial.shippingRegions": "Shipping regions",
-  "commercial.paymentTerms": "Payment terms",
-  "compliance.certifications": "Certifications",
-  "compliance.gstNumber": "GST registration",
-  "compliance.isoCertifications": "ISO certifications",
+// Evidence rendering (buildEvidenceItems / formatEvidenceDate) now lives
+// in lib/evidence.ts, shared with the Decision Trace panel — see the
+// import above. Logic unchanged from the original version of this file.
+
+// Real, measured pipeline timing (hackathon submission-readiness pass,
+// Phase 3) — every field here is either a server-reported
+// performance.now() measurement (extractionMs/retrievalMs/matchingMs,
+// from app/api/analyze and app/api/suppliers/search) or the client's own
+// performance.now() measurement of the full round trip (totalMs). A
+// field is null when that stage's timing wasn't available (e.g. an
+// older cached response), never a placeholder number.
+type PipelineTiming = {
+  extractionMs: number | null;
+  retrievalMs: number | null;
+  matchingMs: number | null;
+  totalMs: number | null;
 };
-
-function evidenceFieldLabel(field: string): string {
-  return (
-    EVIDENCE_FIELD_LABELS[field] ||
-    field
-      .split(".")
-      .pop()!
-      .replace(/([a-z])([A-Z])/g, "$1 $2")
-      .replace(/^./, (char) => char.toUpperCase())
-  );
-}
-
-type EvidenceItem = {
-  fieldLabel: string;
-  sourceName: string;
-  sourceUrl: string;
-  retrievedAt: string;
-};
-
-// Flattens a supplier's sources into one row per (field, source) pair —
-// this is the data behind the evidence drawer in the supplier detail
-// modal. A supplier with no sources yields an empty array, which the
-// modal renders as "No public evidence available" rather than inventing
-// anything to fill the gap.
-function buildEvidenceItems(vendor: MatchedSupplier): EvidenceItem[] {
-  return vendor.intelligence.sources.flatMap((source) =>
-    source.fields.map((field) => ({
-      fieldLabel: evidenceFieldLabel(field),
-      sourceName: source.sourceName,
-      sourceUrl: source.url,
-      retrievedAt: source.retrievedAt,
-    }))
-  );
-}
-
-function formatEvidenceDate(date: string): string {
-  const parsed = new Date(date);
-
-  if (Number.isNaN(parsed.getTime())) return "Unknown date";
-
-  return parsed.toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 export default function Home() {
   const router = useRouter();
@@ -305,6 +253,14 @@ export default function Home() {
   );
   const [searchError, setSearchError] = useState<string | null>(null);
   const [analysisStage, setAnalysisStage] = useState<AnalysisStage>("idle");
+  const [pipelineTiming, setPipelineTiming] = useState<PipelineTiming | null>(null);
+  // Which vendor's Decision Trace panel is open, if any — independent of
+  // selectedVendorId (the existing supplier-detail/comparison modals),
+  // so Decision Trace can be opened from a card, the detail modal, or
+  // the comparison table without interfering with either.
+  const [decisionTraceVendorId, setDecisionTraceVendorId] = useState<
+    number | null
+  >(null);
   const [selectionNotice, setSelectionNotice] = useState<string | null>(null);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
   // id -> company name for every supplier in the catalog, independent of
@@ -382,8 +338,15 @@ export default function Home() {
     }
   };
 
-  const handleAnalyze = async () => {
-    if (!query.trim()) return;
+  // Accepts an optional override so the demo entry point (Phase 6) can
+  // submit a prefilled request immediately, through this exact same real
+  // pipeline, instead of relying on `query` state having already
+  // committed before the fetch fires.
+  const handleAnalyze = async (overrideQuery?: string) => {
+    const activeQuery = overrideQuery ?? query;
+    if (!activeQuery.trim()) return;
+
+    if (overrideQuery !== undefined) setQuery(overrideQuery);
 
     setLoading(true);
     setShowResults(false);
@@ -391,7 +354,16 @@ export default function Home() {
     setCompareIds([]);
     setSearchError(null);
     setSelectionNotice(null);
+    setPipelineTiming(null);
     setAnalysisStage("understanding");
+
+    // Real, client-measured total pipeline time (Phase 3) — brackets the
+    // entire two-request round trip the buyer actually waits through.
+    // `window.performance` (not the bare `performance` global) because
+    // this component already has a state variable named `performance`
+    // (the supplier performance panel below) that would otherwise shadow
+    // it.
+    const pipelineStart = window.performance.now();
 
     try {
       const response = await fetch("/api/analyze", {
@@ -399,7 +371,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query: activeQuery }),
       });
 
       const text = await response.text();
@@ -434,6 +406,7 @@ export default function Home() {
         suppliers?: MatchedSupplier[];
         meta?: SearchMeta;
         retrieval?: RetrievalMeta;
+        timing?: { retrievalMs: number; matchingMs: number; totalMs: number };
         error?: string;
       };
 
@@ -453,6 +426,19 @@ export default function Home() {
       );
       setMatchMeta(searchData.meta ?? null);
       setRetrievalMeta(searchData.retrieval ?? null);
+      setPipelineTiming({
+        extractionMs:
+          typeof data?.timing?.extractionMs === "number" ? data.timing.extractionMs : null,
+        retrievalMs:
+          typeof searchData.timing?.retrievalMs === "number"
+            ? searchData.timing.retrievalMs
+            : null,
+        matchingMs:
+          typeof searchData.timing?.matchingMs === "number"
+            ? searchData.timing.matchingMs
+            : null,
+        totalMs: Math.round(window.performance.now() - pipelineStart),
+      });
       setAnalysisStage("evidence");
       setShowResults(true);
 
@@ -482,6 +468,14 @@ export default function Home() {
     matchedSuppliers.find(
       (vendor) => vendor.id === selectedVendorId
     ) || null;
+
+  const decisionTraceVendor =
+    matchedSuppliers.find((vendor) => vendor.id === decisionTraceVendorId) || null;
+
+  // Structurally compatible with DecisionTraceRequirementInput — passed
+  // to both the Decision Trace panel and the search-outcome diagnosis
+  // below, so both read the exact same requirement facts.
+  const requirementInput: DecisionTraceRequirementInput = requirements;
 
   // Derived supplier performance (P0 #3) — fetched fresh on demand
   // whenever the detail modal opens for a real supplier (not the -1
@@ -521,6 +515,25 @@ export default function Home() {
     matchedSuppliers.filter((vendor) =>
       compareIds.includes(vendor.id)
     );
+
+  // How many of the currently-selected suppliers do NOT fully qualify
+  // against the stated hard requirements (Phase 8: make the transition
+  // into an RFQ an informed one, without blocking it — ProcureAI still
+  // lets the buyer request quotes from a partially-verified supplier,
+  // it just says so first).
+  const compareDecisions = comparisonVendors.map((vendor) =>
+    buildDecisionTrace(vendor, requirementInput)
+  );
+  const nonQualifiedCompareCount = compareDecisions.filter(
+    (trace) => trace.decision !== "qualified"
+  ).length;
+
+  // Scenario-aware diagnosis of a weak/empty result set (Phase 5) — null
+  // when there's nothing special to explain (plenty of strong matches).
+  const searchDiagnosis =
+    matchMeta && showResults
+      ? diagnoseSearchOutcome(matchedSuppliers, matchMeta, requirementInput)
+      : null;
 
   // Suppliers actually worth showing as candidates for THIS requirement.
   // "no_match" suppliers have no evidence of relevance at all (see
@@ -1025,7 +1038,7 @@ export default function Home() {
 
                   <Button
                     variant="primary"
-                    onClick={handleAnalyze}
+                    onClick={() => handleAnalyze()}
                     disabled={loading}
                   >
                     {loading
@@ -1106,6 +1119,18 @@ export default function Home() {
                     {suggestion.label}
                   </button>
                 ))}
+
+                {/* DEMO ENTRY POINT (Phase 6) — prefills and immediately
+                    runs the same real pipeline as every other search
+                    (extraction -> Moss retrieval -> matching), never a
+                    hardcoded or bypassed result. */}
+                <button
+                  onClick={() => handleAnalyze(suggestions[0].query)}
+                  disabled={loading}
+                  className={buttonClasses("primary", "sm")}
+                >
+                  Try a live demo →
+                </button>
 
               </div>
               </div>
@@ -1255,12 +1280,44 @@ export default function Home() {
                     </div>
                   )}
 
+                  {/* REAL PIPELINE LATENCY (Phase 3) — every number here
+                      is a real performance.now() measurement returned by
+                      the actual request that just ran (see handleAnalyze
+                      and app/api/analyze, app/api/suppliers/search); a
+                      stage renders only when its measurement is present,
+                      never a guessed or hardcoded figure. */}
+                  {pipelineTiming && (
+                    <p className="mb-6 font-ledger-mono text-[11px] uppercase tracking-[0.04em] text-text-tertiary">
+                      {[
+                        pipelineTiming.extractionMs !== null
+                          ? `Understood in ${pipelineTiming.extractionMs}ms`
+                          : null,
+                        pipelineTiming.retrievalMs !== null
+                          ? `retrieved in ${pipelineTiming.retrievalMs}ms`
+                          : null,
+                        pipelineTiming.matchingMs !== null
+                          ? `matched in ${pipelineTiming.matchingMs}ms`
+                          : null,
+                        pipelineTiming.totalMs !== null
+                          ? `total ${(pipelineTiming.totalMs / 1000).toFixed(1)}s`
+                          : null,
+                      ]
+                        .filter((part): part is string => Boolean(part))
+                        .join(" · ")}
+                    </p>
+                  )}
+
                   {matchMeta && (
                     <div className="mb-6 rounded-md border border-warning/30 bg-warning-soft px-5 py-4 text-text-primary">
-                      {matchMeta.strong === 0 && (
-                        <p className="font-ledger-serif text-lg font-medium">
-                          No suppliers fully match your requirements yet.
-                        </p>
+                      {searchDiagnosis && (
+                        <>
+                          <p className="font-ledger-serif text-lg font-medium">
+                            {searchDiagnosis.title}
+                          </p>
+                          <p className="mt-2 max-w-3xl text-sm leading-6 text-warning/80">
+                            {searchDiagnosis.message}
+                          </p>
+                        </>
                       )}
 
                       <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
@@ -1280,11 +1337,13 @@ export default function Home() {
                         )}
                       </div>
 
-                      <p className="mt-2 max-w-3xl text-sm leading-6 text-warning/80">
-                        Potential matches have partial evidence for your
-                        requirements and should be verified directly with the
-                        supplier before you send an RFQ.
-                      </p>
+                      {!searchDiagnosis && (
+                        <p className="mt-2 max-w-3xl text-sm leading-6 text-warning/80">
+                          Potential matches have partial evidence for your
+                          requirements and should be verified directly with the
+                          supplier before you send an RFQ.
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -1307,6 +1366,21 @@ export default function Home() {
                         <p className="text-xs text-text-secondary">
                           Compare side-by-side, or send them an RFQ
                         </p>
+
+                        {/* Phase 8 — makes the decision -> RFQ transition an
+                            informed one without blocking it: a supplier
+                            that doesn't fully qualify can still be sent an
+                            RFQ, the buyer just isn't left to discover that
+                            after the fact. */}
+                        {nonQualifiedCompareCount > 0 && (
+                          <p className="mt-1 text-xs text-warning">
+                            {nonQualifiedCompareCount} of {comparisonVendors.length}{" "}
+                            selected supplier
+                            {comparisonVendors.length === 1 ? "" : "s"} don&apos;t
+                            fully qualify yet — view Decision Trace before
+                            sending.
+                          </p>
+                        )}
                       </div>
 
                       <div className="flex gap-3">
@@ -1557,6 +1631,13 @@ export default function Home() {
                                   }
                                 >
                                   View supplier
+                                </Button>
+
+                                <Button
+                                  variant="secondary"
+                                  onClick={() => setDecisionTraceVendorId(vendor.id)}
+                                >
+                                  Decision trace
                                 </Button>
 
                                 {vendor.identity.website && (
@@ -1893,6 +1974,13 @@ export default function Home() {
 
                 <Button
                   variant="secondary"
+                  onClick={() => setDecisionTraceVendorId(selectedVendor.id)}
+                >
+                  Decision trace
+                </Button>
+
+                <Button
+                  variant="secondary"
                   onClick={() =>
                     toggleCompare(
                       selectedVendor.id
@@ -1989,6 +2077,11 @@ export default function Home() {
                     />
 
                     <ComparisonRow
+                      label="Decision"
+                      values={compareDecisions.map((trace) => trace.decisionLabel)}
+                    />
+
+                    <ComparisonRow
                       label="Category"
                       values={comparisonVendors.map(
                         (v) =>
@@ -2051,7 +2144,7 @@ export default function Home() {
 
               </div>
 
-              <div className="flex justify-end gap-3 border-t border-border p-7">
+              <div className="flex flex-wrap justify-end gap-3 border-t border-border p-7">
 
                 <Button
                   variant="secondary"
@@ -2061,6 +2154,16 @@ export default function Home() {
                 >
                   Close
                 </Button>
+
+                {comparisonVendors.map((vendor) => (
+                  <Button
+                    key={vendor.id}
+                    variant="secondary"
+                    onClick={() => setDecisionTraceVendorId(vendor.id)}
+                  >
+                    {vendor.identity.companyName} — Decision trace
+                  </Button>
+                ))}
 
                 {comparisonVendors
                   .filter((vendor) => vendor.identity.website)
@@ -2080,6 +2183,17 @@ export default function Home() {
 
           </Modal>
         )}
+
+      {/* DECISION TRACE — independent of the two modals above; can be
+          opened from a supplier card, the detail modal, or the
+          comparison table. */}
+      {decisionTraceVendor && (
+        <DecisionTrace
+          vendor={decisionTraceVendor}
+          requirements={requirementInput}
+          onClose={() => setDecisionTraceVendorId(null)}
+        />
+      )}
 
     </main>
   );

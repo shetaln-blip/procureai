@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { performance } from "node:perf_hooks";
 import { matchSuppliers, type SearchCriteria } from "@/lib/matching";
 import { recallSuppliers } from "@/lib/moss/retrieve";
 
@@ -41,13 +42,23 @@ export async function POST(request: Request) {
         : null,
     };
 
+    // Real latency instrumentation (hackathon submission-readiness pass,
+    // Phase 3) — performance.now() brackets each real pipeline stage
+    // (Moss/catalog retrieval, then deterministic matching) separately.
+    // No hardcoded numbers, nothing estimated.
+    const retrievalStart = performance.now();
     const { suppliers, retrieval } = await recallSuppliers(criteria);
+    const retrievalMs = Math.round(performance.now() - retrievalStart);
+
+    const matchingStart = performance.now();
     const { suppliers: matched, meta } = matchSuppliers(suppliers, criteria);
+    const matchingMs = Math.round(performance.now() - matchingStart);
 
     return NextResponse.json({
       suppliers: matched,
       meta,
       retrieval,
+      timing: { retrievalMs, matchingMs, totalMs: retrievalMs + matchingMs },
     });
   } catch (error) {
     console.error("Supplier search failed:", error);

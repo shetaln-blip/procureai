@@ -62,6 +62,14 @@ export type MatchExplanation = {
   quantityMatch: FieldMatch;
   priceMatch: FieldMatch;
   deliveryMatch: FieldMatch;
+  // null = the buyer stated no certification requirement at all (not
+  // applicable to this request) — distinct from "unknown" (a requirement
+  // WAS stated but this supplier's data can't confirm or deny it). Added
+  // for the Decision Trace / Constraint Checklist (hackathon
+  // submission-readiness pass): this is the SAME check already performed
+  // below in the certifications block, just exposed as a discrete field
+  // instead of only feeding hardMismatches/reasons.
+  certificationMatch: FieldMatch | null;
   evidenceQuality: Supplier["intelligence"]["dataConfidence"];
   // 0-100 — how much of the STATED requirement could actually be
   // checked against real supplier data (not how well it scored). A
@@ -625,6 +633,8 @@ function scoreSupplier(
   }
 
   // --- CERTIFICATIONS (explicit = hard requirement) -------------------
+  let certificationMatch: FieldMatch | null = null;
+
   if (signal.certifications.length > 0) {
     checkableFacets++;
     const certText = supplierCertificationText(supplier);
@@ -633,10 +643,12 @@ function scoreSupplier(
     );
 
     if (matched.length === signal.certifications.length) {
+      certificationMatch = "match";
       score += 12;
       verifiedFacets++;
       matchedCapabilities.push(`${matched.join(", ")} certified`);
     } else if (matched.length > 0) {
+      certificationMatch = "partial";
       score += 6;
       verifiedFacets++;
       matchedCapabilities.push(`${matched.join(", ")} certified`);
@@ -644,6 +656,7 @@ function scoreSupplier(
       unmatchedRequirements.push(`${missing.join(", ")} not listed`);
       hardMismatches++;
     } else {
+      certificationMatch = "mismatch";
       unmatchedRequirements.push(
         `${signal.certifications.join(", ")} not listed for this supplier`
       );
@@ -873,6 +886,7 @@ function scoreSupplier(
       quantityMatch,
       priceMatch,
       deliveryMatch,
+      certificationMatch,
       evidenceQuality: supplier.intelligence.dataConfidence,
       confidence,
     },

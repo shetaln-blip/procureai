@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { performance } from "node:perf_hooks";
 import { toLegacyRequirements } from "@/lib/extraction/legacy-adapter";
 import { extractProcurementRequirement } from "@/lib/extraction/pipeline";
 
@@ -24,13 +25,20 @@ export async function POST(request: Request) {
       );
     }
 
+    // Real latency instrumentation (hackathon submission-readiness pass,
+    // Phase 3) — performance.now() brackets the actual extraction call.
+    // No hardcoded numbers, nothing estimated.
+    const extractionStart = performance.now();
     const result = extractProcurementRequirement(query);
+    const extractionMs = Math.round(performance.now() - extractionStart);
+
     const legacy = toLegacyRequirements(result);
 
     return NextResponse.json({
       ...legacy,
       structured: result.requirement,
       warnings: result.warnings,
+      timing: { extractionMs },
     });
   } catch (error) {
     console.error("ProcureAI analysis error:", error);
