@@ -744,25 +744,9 @@ export default function Home() {
               Dashboard
             </button>
 
-            <button
-              onClick={() => {
-                setShowRequests(false);
-
-                // Smart-scroll: jump straight to the results if they're
-                // already on screen, otherwise scroll up to the search
-                // box so there's something to click through to — "Vendors"
-                // previously linked to #suppliers, an id that only exists
-                // once a search has run, so before that it did nothing.
-                const target = showResults
-                  ? document.getElementById("suppliers")
-                  : document.getElementById("procurement-search");
-
-                target?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="transition hover:text-text-primary"
-            >
+            <Link href="/vendors" className="transition hover:text-text-primary">
               Vendors
-            </button>
+            </Link>
 
             <button
               onClick={() => setShowRequests(true)}
