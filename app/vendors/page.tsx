@@ -1,24 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
+  Badge,
+  type BadgeTone,
   buttonClasses,
   Card,
   EmptyState,
+  Field,
   Notice,
   PageHeader,
+  Select,
   Table,
   Td,
   Th,
 } from "@/components/ui";
 import type { VendorLeaderboardEntry } from "@/app/api/suppliers/leaderboard/route";
+import type { CategoryCount } from "@/app/api/suppliers/categories/route";
+import type { TopSupplierEntry } from "@/app/api/suppliers/top/route";
+import type { DataConfidence } from "@/lib/supplier-types";
 
 type LeaderboardResponse = {
   ranked: VendorLeaderboardEntry[];
   totalSuppliersInCatalog: number;
   totalWithHistory: number;
   message: string | null;
+};
+
+type TopSuppliersResponse = {
+  category: string;
+  totalInCategory: number;
+  results: TopSupplierEntry[];
+};
+
+const CONFIDENCE_TONE: Record<DataConfidence, BadgeTone> = {
+  high: "success",
+  medium: "warning",
+  low: "neutral",
+};
+
+const CONFIDENCE_LABEL: Record<DataConfidence, string> = {
+  high: "High confidence",
+  medium: "Medium confidence",
+  low: "Low confidence",
 };
 
 function formatPercent(value: number | null): string {
@@ -35,10 +60,23 @@ function formatPrice(value: number | null): string {
   return value === null ? "—" : `₹${Math.round(value).toLocaleString("en-IN")}`;
 }
 
+function formatDate(value: string): string {
+  const parsed = new Date(value);
+  return Number.isFinite(parsed.getTime())
+    ? parsed.toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" })
+    : "Unknown";
+}
+
 export default function VendorsPage() {
   const [data, setData] = useState<LeaderboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [categories, setCategories] = useState<CategoryCount[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [categoryData, setCategoryData] = useState<TopSuppliersResponse | null>(null);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+  const [categoryError, setCategoryError] = useState("");
 
   useEffect(() => {
     fetch("/api/suppliers/leaderboard")
@@ -53,6 +91,42 @@ export default function VendorsPage() {
       )
       .finally(() => setLoading(false));
   }, []);
+
+  const loadCategory = useCallback((category: string) => {
+    setCategoryLoading(true);
+    setCategoryError("");
+
+    fetch(`/api/suppliers/top?category=${encodeURIComponent(category)}`)
+      .then(async (res) => {
+        const body = await res.json();
+        if (!res.ok) throw new Error(body?.error || "Failed to load.");
+        return body as TopSuppliersResponse;
+      })
+      .then(setCategoryData)
+      .catch((err) =>
+        setCategoryError(
+          err instanceof Error ? err.message : "Failed to load suppliers for this category."
+        )
+      )
+      .finally(() => setCategoryLoading(false));
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/suppliers/categories")
+      .then(async (res) => {
+        const body = await res.json();
+        if (!res.ok) throw new Error(body?.error || "Failed to load categories.");
+        return body.categories as CategoryCount[];
+      })
+      .then((list) => {
+        setCategories(list);
+        if (list.length > 0) {
+          setSelectedCategory(list[0].category);
+          loadCategory(list[0].category);
+        }
+      })
+      .catch(() => setCategories([]));
+  }, [loadCategory]);
 
   return (
     <main className="min-h-screen bg-bg text-text-primary">
@@ -192,6 +266,129 @@ export default function VendorsPage() {
             </Card>
           </>
         )}
+      </section>
+
+      <section className="mx-auto max-w-6xl px-8 pb-24">
+        <div className="border-t border-border pt-12">
+          <PageHeader
+            eyebrow="Supplier directory"
+            eyebrowTone="neutral"
+            title="Browse by category"
+            description="The most thoroughly documented suppliers in each category — ranked by evidence on file (source count and how recently it was gathered), not by a quality or performance score."
+          />
+
+          {categories.length > 0 && (
+            <div className="mt-6 max-w-xs">
+              <Field label="Category">
+                <Select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setSelectedCategory(next);
+                    loadCategory(next);
+                  }}
+                >
+                  {categories.map((c) => (
+                    <option key={c.category} value={c.category}>
+                      {c.category} ({c.count})
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            </div>
+          )}
+
+          {categoryLoading ? (
+            <p className="mt-8 font-ledger-mono text-sm text-text-secondary">
+              Loading suppliers…
+            </p>
+          ) : categoryError ? (
+            <div className="mt-8">
+              <Notice tone="danger">{categoryError}</Notice>
+            </div>
+          ) : categoryData && categoryData.results.length > 0 ? (
+            <>
+              <p className="mt-6 font-ledger-mono text-[11px] uppercase tracking-[0.06em] text-text-tertiary">
+                Showing top {categoryData.results.length} of {categoryData.totalInCategory}{" "}
+                suppliers in &ldquo;{categoryData.category}&rdquo;
+              </p>
+
+              <div className="mt-4">
+                <Table>
+                  <thead>
+                    <tr>
+                      <Th>Rank</Th>
+                      <Th>Vendor</Th>
+                      <Th>Evidence</Th>
+                      <Th>MOQ / Price / Lead time</Th>
+                      <Th>Certifications</Th>
+                      <Th>Last verified</Th>
+                      <Th>ProcureAI activity</Th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {categoryData.results.map((entry, index) => (
+                      <tr key={entry.vendorId}>
+                        <Td className="tabular font-ledger-mono text-text-tertiary">
+                          {index + 1}
+                        </Td>
+                        <Td>
+                          <div className="font-medium text-text-primary">
+                            {entry.companyName}
+                          </div>
+                          <div className="mt-0.5 text-xs text-text-secondary">
+                            {entry.location || "Location not listed"}
+                          </div>
+                        </Td>
+                        <Td>
+                          <Badge tone={CONFIDENCE_TONE[entry.dataConfidence]} dot>
+                            {CONFIDENCE_LABEL[entry.dataConfidence]}
+                          </Badge>
+                          <div className="mt-1.5 text-xs text-text-tertiary">
+                            {entry.sourceCount} source{entry.sourceCount === 1 ? "" : "s"}
+                          </div>
+                        </Td>
+                        <Td className="text-xs leading-5">
+                          <div>{entry.moq ?? "MOQ not listed"}</div>
+                          <div>{entry.priceRange ?? "Pricing not public"}</div>
+                          <div>{entry.leadTime ?? "Lead time not listed"}</div>
+                        </Td>
+                        <Td className="text-xs leading-5">
+                          {entry.certifications.length > 0
+                            ? entry.certifications.join(", ")
+                            : "None listed"}
+                        </Td>
+                        <Td className="text-xs">{formatDate(entry.lastUpdated)}</Td>
+                        <Td className="text-xs leading-5">
+                          {entry.performance.rfqsReceived > 0 ? (
+                            <>
+                              {entry.performance.quotesSubmitted}/
+                              {entry.performance.rfqsReceived} quoted ·{" "}
+                              {entry.performance.ordersAwarded} won
+                            </>
+                          ) : (
+                            <span className="text-text-tertiary">
+                              Not yet contacted through ProcureAI
+                            </span>
+                          )}
+                        </Td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </>
+          ) : (
+            categoryData && (
+              <div className="mt-8">
+                <EmptyState
+                  title="No suppliers in this category"
+                  description="Try a different category from the selector above."
+                />
+              </div>
+            )
+          )}
+        </div>
       </section>
     </main>
   );
