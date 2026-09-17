@@ -703,24 +703,6 @@ export default function Home() {
     );
   };
 
-  const navigateToSuppliers = () => {
-    const scrollToTarget = () => {
-      const targetId = showResults ? "suppliers" : "procurement-search";
-      document.getElementById(targetId)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    };
-
-    if (showRequests) {
-      setShowRequests(false);
-      window.setTimeout(scrollToTarget, 0);
-      return;
-    }
-
-    scrollToTarget();
-  };
-
   const getVendorName = (id: number) => {
     return supplierNames[id] || "Supplier";
   };
@@ -763,11 +745,23 @@ export default function Home() {
             </button>
 
             <button
-              type="button"
-              onClick={navigateToSuppliers}
+              onClick={() => {
+                setShowRequests(false);
+
+                // Smart-scroll: jump straight to the results if they're
+                // already on screen, otherwise scroll up to the search
+                // box so there's something to click through to — "Vendors"
+                // previously linked to #suppliers, an id that only exists
+                // once a search has run, so before that it did nothing.
+                const target = showResults
+                  ? document.getElementById("suppliers")
+                  : document.getElementById("procurement-search");
+
+                target?.scrollIntoView({ behavior: "smooth" });
+              }}
               className="transition hover:text-text-primary"
             >
-              Suppliers
+              Vendors
             </button>
 
             <button
